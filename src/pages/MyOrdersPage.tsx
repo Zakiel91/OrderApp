@@ -18,17 +18,6 @@ const STATUS_COLORS: Record<string, string> = {
   in_stock: 'bg-cyan-500/20 text-cyan-400',
 }
 
-// Track when user started using the app — only show orders created after this date
-function getAppStartDate(): string {
-  const key = 'app_start_date'
-  let date = localStorage.getItem(key)
-  if (!date) {
-    date = new Date().toISOString().split('T')[0]
-    localStorage.setItem(key, date)
-  }
-  return date
-}
-
 // Sample order shown until user creates their own
 const SAMPLE_ORDER: Order = {
   id: -1,
@@ -53,28 +42,9 @@ export function MyOrdersPage() {
   useEffect(() => {
     if (!user) { setLoading(false); return }
 
-    const startDate = getAppStartDate()
-
+    // Worker filters by salesman identity from JWT — no client-side filtering needed
     getOrders(1, 200).then(res => {
-      const allOrders = res.orders || []
-
-      // Only show orders created after user started using the app
-      // FIX orders are visible to everyone, regular orders filtered by user prefix
-      const myOrders = allOrders.filter(o => {
-        // Must be created on or after app start date
-        if (o.order_date < startDate && o.created_at && o.created_at < startDate) return false
-
-        // FIX orders visible to all
-        if (o.order_prefix === 'FIX') return true
-
-        // Regular orders: only show user's own
-        return (
-          o.order_prefix === user.prefix ||
-          o.salesman_name?.toLowerCase() === user.name.toLowerCase()
-        )
-      })
-
-      setOrders(myOrders)
+      setOrders(res.orders || [])
     }).catch(() => {}).finally(() => setLoading(false))
   }, [user])
 
@@ -86,7 +56,6 @@ export function MyOrdersPage() {
     )
   }
 
-  // Show sample order if no real orders yet
   const showSample = orders.length === 0
   const displayOrders = showSample ? [SAMPLE_ORDER] : orders
 
@@ -114,7 +83,7 @@ export function MyOrdersPage() {
           <div
             key={order.id}
             onClick={() => {
-              if (order.id === -1) return // Sample order not clickable
+              if (order.id === -1) return
               navigate(`/orders/${order.id}`)
             }}
             className={`bg-[var(--color-surface)] rounded-xl p-4 transition-colors ${
