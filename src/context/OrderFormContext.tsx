@@ -26,7 +26,10 @@ export function OrderFormProvider({ children }: { children: ReactNode }) {
   const totalSteps = 5 // Was 6, Step1 removed (all automatic)
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(form))
+    // Don't save File objects to localStorage
+    const { image_files, ...rest } = form
+    void image_files
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(rest))
   }, [form])
 
   const updateField = useCallback(<K extends keyof OrderFormData>(key: K, value: OrderFormData[K]) => {
