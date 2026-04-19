@@ -89,18 +89,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
+    let attempts = 0
+    const MAX_ATTEMPTS = 30 // 6 seconds total
+    let timerId: ReturnType<typeof setTimeout>
+
     const initGoogle = () => {
       if (!(window as any).google?.accounts?.id) {
-        setTimeout(initGoogle, 200)
+        if (++attempts >= MAX_ATTEMPTS) {
+          setAuthError('Google Sign-In failed to load. Please refresh the page.')
+          return
+        }
+        timerId = setTimeout(initGoogle, 200)
         return
       }
-      (window as any).google.accounts.id.initialize({
+      ;(window as any).google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: handleGoogleResponse,
         auto_select: true,
       })
     }
+
     initGoogle()
+    return () => clearTimeout(timerId)
   }, [handleGoogleResponse])
 
   const loginWithGoogle = useCallback(() => {
