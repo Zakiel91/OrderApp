@@ -9,7 +9,7 @@
 ## Phases
 
 - [x] **Phase 0: Completed This Session** — BUG-01, BUG-02, BUG-03 resolved in prior session work
-- [ ] **Phase 1: Security & Data Integrity** — Strip dev PIN from production; prevent image blobs in localStorage
+- [x] **Phase 1: Security & Data Integrity** — Strip dev PIN from production; prevent image blobs in localStorage
 - [ ] **Phase 2: Mobile UX Foundation** — Scroll resets, fixed bottom nav, thumb-friendly tap targets
 - [ ] **Phase 3: Wizard Polish** — Step indicator, draft saved indicator, smooth step transitions
 - [ ] **Phase 4: Orders Features** — Edit UI for pending orders, search/filter bar, error states
@@ -42,8 +42,8 @@
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Remove IS_DEV, DEV_CODE, loginWithDevCode from LoginPage.tsx and AuthContext.tsx (BUG-04)
-- [ ] 01-02-PLAN.md — Strip image_files before localStorage write in OrderFormContext.tsx (BUG-05)
+- [x] 01-01-PLAN.md — Remove IS_DEV, DEV_CODE, loginWithDevCode from LoginPage.tsx and AuthContext.tsx (BUG-04)
+- [x] 01-02-PLAN.md — Strip image_files before localStorage write in OrderFormContext.tsx (BUG-05)
 
 ---
 
@@ -91,7 +91,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 0. Completed This Session | 3/3 | Done | 2026-04-19 |
-| 1. Security & Data Integrity | 0/2 | Not started | - |
+| 1. Security & Data Integrity | 2/2 | Done | 2026-04-20 |
 | 2. Mobile UX Foundation | 0/2 | Not started | - |
 | 3. Wizard Polish | 0/2 | Not started | - |
 | 4. Orders Features | 0/3 | Not started | - |
@@ -105,8 +105,8 @@ Plans:
 | BUG-01 | Phase 0 | Complete |
 | BUG-02 | Phase 0 | Complete |
 | BUG-03 | Phase 0 | Complete |
-| BUG-04 | Phase 1 | Pending |
-| BUG-05 | Phase 1 | Pending |
+| BUG-04 | Phase 1 | Complete |
+| BUG-05 | Phase 1 | Complete |
 | UX-01 | Phase 2 | Pending |
 | UX-03 | Phase 2 | Pending |
 | UX-06 | Phase 2 | Pending |

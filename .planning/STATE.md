@@ -1,6 +1,6 @@
 # Order App — Project State
 
-**Last updated:** 2026-04-19
+**Last updated:** 2026-04-20
 **Milestone:** Mobile UX Overhaul
 
 ---
@@ -16,16 +16,16 @@
 
 ## Current Position
 
-**Current phase:** Phase 1 — Security & Data Integrity
+**Current phase:** Phase 2 — Mobile UX Foundation
 **Current plan:** None started
-**Status:** Ready to execute Phase 1 (2 plans in 1 wave)
+**Status:** Phase 1 complete — ready to discuss/plan Phase 2
 
 ```
-Progress: [##........] Phase 0 complete (3/14 requirements done)
+Progress: [####......] Phase 1 complete (5/14 requirements done)
 ```
 
-**Phase 0 complete** (BUG-01, BUG-02, BUG-03 — done in this session)
-**Phase 1 up next** (BUG-04, BUG-05)
+**Phase 1 complete** (BUG-04, BUG-05 — executed 2026-04-20)
+**Phase 2 up next** (UX-01, UX-03, UX-06)
 
 ---
 
@@ -61,7 +61,7 @@ None at this time.
 1. Read `C:\OrderApp\.planning\PROJECT.md` for full context
 2. Read `C:\OrderApp\.planning\ROADMAP.md` for phase structure
 3. Check progress table in ROADMAP.md to find current phase
-4. Run `/gsd-plan-phase 1` to plan Phase 1 work
+4. Run `/gsd-discuss-phase 2` to discuss Phase 2, or `/gsd-plan-phase 2` to plan directly
 
 **Key files:**
 - Planning: `C:\OrderApp\.planning\`
