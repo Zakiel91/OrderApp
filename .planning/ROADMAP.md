@@ -39,7 +39,11 @@
   1. Entering PIN 9119 on the production login screen does not grant access (dev shortcut is gone)
   2. After filling in the order wizard (including attaching images), localStorage draft data contains no binary image content — only metadata
   3. The app bundle ships to production with no hardcoded PIN constant visible in the compiled output
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Remove IS_DEV, DEV_CODE, loginWithDevCode from LoginPage.tsx and AuthContext.tsx (BUG-04)
+- [ ] 01-02-PLAN.md — Strip image_files before localStorage write in OrderFormContext.tsx (BUG-05)
 
 ---
 
