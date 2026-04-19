@@ -15,7 +15,6 @@ export interface User {
 interface AuthContextType {
   user: User | null
   loginWithGoogle: () => void
-  loginWithDevCode: () => void
   logout: () => void
   isAdmin: boolean
   isLoading: boolean
@@ -114,18 +113,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  const loginWithDevCode = useCallback(() => {
-    const devUser: User = {
-      email: 'admin@innovationdia.com',
-      name: 'Dev Admin',
-      picture: '',
-      prefix: 'INNO',
-      role: 'admin',
-    }
-    setUser(devUser)
-    localStorage.setItem('user', JSON.stringify(devUser))
-  }, [])
-
   const logout = useCallback(() => {
     setUser(null)
     setAuthError(null)
@@ -139,7 +126,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider value={{
-      user, loginWithGoogle, loginWithDevCode, logout,
+      user, loginWithGoogle, logout,
       isAdmin: user?.role === 'admin',
       isLoading, authError,
     }}>
