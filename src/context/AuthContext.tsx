@@ -52,7 +52,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       if (!res.ok || !data.allowed) {
-        setAuthError(data.error || 'Access denied')
+        const userMessage =
+          res.status === 403 ? 'Access denied. Your account is not authorized.' :
+          res.status === 429 ? 'Too many attempts. Please wait and try again.' :
+          'Authentication failed. Please try again.'
+        setAuthError(data.allowed === false ? userMessage : 'Authentication failed. Please try again.')
+        setIsLoading(false)
+        return
+      }
+
+      const ALLOWED_ROLES: User['role'][] = ['admin', 'salesman']
+      const rawRole = data.role
+
+      if (!rawRole || !ALLOWED_ROLES.includes(rawRole as User['role'])) {
+        setAuthError('Invalid session data. Please contact support.')
         setIsLoading(false)
         return
       }
@@ -62,7 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         name: data.name || '',
         picture: data.picture || '',
         prefix: data.order_prefix || 'INNO',
-        role: (data.role as User['role']) || 'salesman',
+        role: rawRole as User['role'],
         token: data.token,
       }
       setUser(newUser)
