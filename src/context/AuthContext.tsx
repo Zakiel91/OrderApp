@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react'
 
-const GOOGLE_CLIENT_ID = '834868664035-f5kq50i6lb6etvm3v7bh63heft2tttja.apps.googleusercontent.com'
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string
+if (!GOOGLE_CLIENT_ID) throw new Error('VITE_GOOGLE_CLIENT_ID is not configured')
 const API_BASE = 'https://innovation-diamonds-api.innovation-diamonds.workers.dev'
 
 export interface User {
