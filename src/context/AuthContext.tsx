@@ -26,8 +26,24 @@ const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(() => {
-    const saved = localStorage.getItem('user')
-    return saved ? JSON.parse(saved) : null
+    try {
+      const saved = localStorage.getItem('user')
+      if (!saved) return null
+      const parsed = JSON.parse(saved)
+      const ALLOWED_ROLES: User['role'][] = ['admin', 'salesman']
+      if (
+        typeof parsed?.email !== 'string' ||
+        typeof parsed?.token !== 'string' ||
+        !ALLOWED_ROLES.includes(parsed?.role)
+      ) {
+        localStorage.removeItem('user')
+        return null
+      }
+      return parsed as User
+    } catch {
+      localStorage.removeItem('user')
+      return null
+    }
   })
   const [isLoading, setIsLoading] = useState(false)
   const [authError, setAuthError] = useState<string | null>(null)
