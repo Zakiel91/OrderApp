@@ -123,7 +123,6 @@ export function Step3Product() {
           value={form.metal || '14K WHITE'}
           onChange={val => updateField('metal', val)}
           metals={METALS_SORTED}
-          showQuickPick
         />
       </FormField>
 
