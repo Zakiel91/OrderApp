@@ -77,7 +77,7 @@ Plans:
 
 Plans:
 - [x] 03-01-PLAN.md — DraftSavedToast component + draft_saved i18n keys (en/he/ru) + CSS keyframes (fadeIn, slideInLeft, slideInRight) (UX-04, UX-05 foundations)
-- [ ] 03-02-PLAN.md — Wire toast + direction-aware transitions into NewOrderPage and FixOrderPage; verify UX-02 (UX-02, UX-04, UX-05)
+- [x] 03-02-PLAN.md — Wire toast + direction-aware transitions into NewOrderPage and FixOrderPage; verify UX-02 (UX-02, UX-04, UX-05)
 **UI hint**: yes
 
 ---
@@ -102,7 +102,7 @@ Plans:
 | 0. Completed This Session | 3/3 | Done | 2026-04-19 |
 | 1. Security & Data Integrity | 2/2 | Done | 2026-04-20 |
 | 2. Mobile UX Foundation | 3/3 | Done | 2026-04-20 |
-| 3. Wizard Polish | 1/2 | In progress | - |
+| 3. Wizard Polish | 2/2 | Done | 2026-04-20 |
 | 4. Orders Features | 0/3 | Not started | - |
 
 ---
@@ -119,9 +119,9 @@ Plans:
 | UX-01 | Phase 2 | Complete |
 | UX-03 | Phase 2 | Complete |
 | UX-06 | Phase 2 | Complete |
-| UX-02 | Phase 3 | Pending |
-| UX-04 | Phase 3 | Pending |
-| UX-05 | Phase 3 | Pending |
+| UX-02 | Phase 3 | Complete |
+| UX-04 | Phase 3 | Complete |
+| UX-05 | Phase 3 | Complete |
 | FEAT-01 | Phase 4 | Pending |
 | FEAT-02 | Phase 4 | Pending |
 | FEAT-03 | Phase 4 | Pending |
