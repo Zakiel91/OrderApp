@@ -211,5 +211,17 @@
   "fix_order_number": "Номер заказа на ремонт",
   "fix_create_another": "Создать ещё один заказ на ремонт",
   "fix_submit": "Отправить заказ на ремонт",
-  "draft_saved": "Черновик сохранён"
+  "draft_saved": "Черновик сохранён",
+
+  "edit_order": "Редактировать заказ",
+  "save_changes": "Сохранить изменения",
+  "save_error": "Не удалось сохранить. Попробуйте снова.",
+  "description": "Описание",
+  "comment": "Комментарий",
+  "search_orders": "Поиск заказов...",
+  "all_statuses": "Все статусы",
+  "orders_count": "{count} заказов",
+  "orders_filtered": "{filtered} из {total}",
+  "orders_load_error": "Не удалось загрузить заказы. Проверьте соединение и попробуйте снова.",
+  "retry": "Повторить"
 }

@@ -211,5 +211,17 @@
   "fix_order_number": "Fix Order Number",
   "fix_create_another": "Create Another Fix Order",
   "fix_submit": "Submit Fix Order",
-  "draft_saved": "Draft saved"
+  "draft_saved": "Draft saved",
+
+  "edit_order": "Edit Order",
+  "save_changes": "Save Changes",
+  "save_error": "Failed to save. Please try again.",
+  "description": "Description",
+  "comment": "Comment",
+  "search_orders": "Search orders...",
+  "all_statuses": "All statuses",
+  "orders_count": "{count} orders",
+  "orders_filtered": "{filtered} of {total}",
+  "orders_load_error": "Could not load orders. Check your connection and try again.",
+  "retry": "Retry"
 }

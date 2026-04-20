@@ -211,5 +211,17 @@
   "fix_order_number": "מספר הזמנת תיקון",
   "fix_create_another": "יצירת הזמנת תיקון נוספת",
   "fix_submit": "שלח הזמנת תיקון",
-  "draft_saved": "טיוטה נשמרה"
+  "draft_saved": "טיוטה נשמרה",
+
+  "edit_order": "ערוך הזמנה",
+  "save_changes": "שמור שינויים",
+  "save_error": "שמירה נכשלה. נסה שוב.",
+  "description": "תיאור",
+  "comment": "הערה",
+  "search_orders": "חיפוש הזמנות...",
+  "all_statuses": "כל הסטטוסים",
+  "orders_count": "{count} הזמנות",
+  "orders_filtered": "{filtered} מתוך {total}",
+  "orders_load_error": "לא ניתן לטעון הזמנות. בדוק את החיבור ונסה שוב.",
+  "retry": "נסה שוב"
 }
