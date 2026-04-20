@@ -16,16 +16,16 @@
 
 ## Current Position
 
-**Current phase:** Phase 2 — Mobile UX Foundation
-**Current plan:** None started
-**Status:** Phase 1 complete — ready to discuss/plan Phase 2
+**Current phase:** Phase 3 — Wizard Polish
+**Current plan:** None started (ready to plan)
+**Status:** Phase 2 complete — ready to plan Phase 3
 
 ```
-Progress: [####......] Phase 1 complete (5/14 requirements done)
+Progress: [########..] Phase 2 complete (8/14 requirements done)
 ```
 
-**Phase 1 complete** (BUG-04, BUG-05 — executed 2026-04-20)
-**Phase 2 up next** (UX-01, UX-03, UX-06)
+**Phase 2 complete** (UX-01, UX-03, UX-06 — executed 2026-04-20)
+**Phase 3 next** (UX-02, UX-04, UX-05 — needs planning)
 
 ---
 

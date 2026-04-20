@@ -10,7 +10,7 @@
 
 - [x] **Phase 0: Completed This Session** — BUG-01, BUG-02, BUG-03 resolved in prior session work
 - [x] **Phase 1: Security & Data Integrity** — Strip dev PIN from production; prevent image blobs in localStorage
-- [ ] **Phase 2: Mobile UX Foundation** — Scroll resets, fixed bottom nav, thumb-friendly tap targets
+- [x] **Phase 2: Mobile UX Foundation** — Scroll resets, fixed bottom nav, thumb-friendly tap targets (complete 2026-04-20)
 - [ ] **Phase 3: Wizard Polish** — Step indicator, draft saved indicator, smooth step transitions
 - [ ] **Phase 4: Orders Features** — Edit UI for pending orders, search/filter bar, error states
 
@@ -58,9 +58,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — WizardNavContext + extend OrderFormContext/FixFormContext + register submit in Step6Review/FixStep3Review (UX-06 foundation)
-- [ ] 02-02-PLAN.md — BottomNav wizard mode (Back/Next/Submit) + scroll reset + remove inline buttons (UX-01, UX-06)
-- [ ] 02-03-PLAN.md — Touch target fixes in Step2Client and Step4Stones (UX-03)
+- [x] 02-01-PLAN.md — WizardNavContext + extend OrderFormContext/FixFormContext + register submit in Step6Review/FixStep3Review (UX-06 foundation)
+- [x] 02-02-PLAN.md — BottomNav wizard mode (Back/Next/Submit) + scroll reset + remove inline buttons (UX-01, UX-06)
+- [x] 02-03-PLAN.md — Touch target fixes in Step2Client and Step4Stones (UX-03)
 **UI hint**: yes
 
 ---
@@ -97,7 +97,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 0. Completed This Session | 3/3 | Done | 2026-04-19 |
 | 1. Security & Data Integrity | 2/2 | Done | 2026-04-20 |
-| 2. Mobile UX Foundation | 0/3 | Not started | - |
+| 2. Mobile UX Foundation | 0/3 | Ready to execute | - |
 | 3. Wizard Polish | 0/2 | Not started | - |
 | 4. Orders Features | 0/3 | Not started | - |
 
