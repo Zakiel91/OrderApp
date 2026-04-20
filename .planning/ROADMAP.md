@@ -73,7 +73,11 @@ Plans:
   1. On every wizard step, the salesperson can see which step they are on (e.g. "Step 2 of 5") without scrolling
   2. After any input change, a "Draft saved" indicator becomes visible in the wizard within 1 second
   3. Moving between steps shows a smooth visual transition with no jarring layout shift or flash
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — DraftSavedToast component + draft_saved i18n keys (en/he/ru) + CSS keyframes (fadeIn, slideInLeft, slideInRight) (UX-04, UX-05 foundations)
+- [ ] 03-02-PLAN.md — Wire toast + direction-aware transitions into NewOrderPage and FixOrderPage; verify UX-02 (UX-02, UX-04, UX-05)
 **UI hint**: yes
 
 ---
@@ -97,8 +101,8 @@ Plans:
 |-------|----------------|--------|-----------|
 | 0. Completed This Session | 3/3 | Done | 2026-04-19 |
 | 1. Security & Data Integrity | 2/2 | Done | 2026-04-20 |
-| 2. Mobile UX Foundation | 0/3 | Ready to execute | - |
-| 3. Wizard Polish | 0/2 | Not started | - |
+| 2. Mobile UX Foundation | 3/3 | Done | 2026-04-20 |
+| 3. Wizard Polish | 0/2 | Ready to execute | - |
 | 4. Orders Features | 0/3 | Not started | - |
 
 ---
@@ -112,9 +116,9 @@ Plans:
 | BUG-03 | Phase 0 | Complete |
 | BUG-04 | Phase 1 | Complete |
 | BUG-05 | Phase 1 | Complete |
-| UX-01 | Phase 2 | Pending |
-| UX-03 | Phase 2 | Pending |
-| UX-06 | Phase 2 | Pending |
+| UX-01 | Phase 2 | Complete |
+| UX-03 | Phase 2 | Complete |
+| UX-06 | Phase 2 | Complete |
 | UX-02 | Phase 3 | Pending |
 | UX-04 | Phase 3 | Pending |
 | UX-05 | Phase 3 | Pending |
