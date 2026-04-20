@@ -56,7 +56,7 @@ Exceptions:
 | Role | Size | Weight | Line Height | Font Stack |
 |------|------|--------|-------------|------------|
 | Body / inputs | 17px | 400 | 1.5 | Inter / system |
-| Label / button | 15px | 500 (medium) / 600 (semibold for primary CTA) | 1.4 | Inter / system |
+| Label / button | 15px | 400 (secondary) / 600 (primary CTA) | 1.4 | Inter / system |
 | Step heading (h2) | 22px (1.4rem) | 600 | 1.2 | Playfair Display / serif |
 | Small / hint | 13px | 400 | 1.5 | Inter / system |
 
@@ -207,11 +207,11 @@ Note: The app is multi-language (Hebrew, English, Russian). All user-visible str
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: PASS
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: FLAG (non-blocking — secondaryButtonClass uses font-medium in code; spec declares 400/600; accepted as-is for brownfield)
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** approved 2026-04-20
