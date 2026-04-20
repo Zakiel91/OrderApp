@@ -10,6 +10,7 @@ import { MyOrdersPage } from './pages/MyOrdersPage'
 import { NewOrderPage } from './pages/NewOrderPage'
 import { FixOrderPage } from './pages/FixOrderPage'
 import { OrderDetailPage } from './pages/OrderDetailPage'
+import { EditOrderPage } from './pages/EditOrderPage'
 import { SettingsPage } from './pages/SettingsPage'
 
 function AppRoutes() {
@@ -39,6 +40,7 @@ function AppRoutes() {
                 <FixOrderPage />
               </FixFormProvider>
             } />
+            <Route path="/orders/:id/edit" element={<EditOrderPage />} />
             <Route path="/orders/:id" element={<OrderDetailPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="*" element={<Navigate to="/orders" replace />} />

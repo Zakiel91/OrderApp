@@ -96,6 +96,14 @@ export function OrderDetailPage() {
         >
           {deleting ? '...' : t('delete')}
         </button>
+        {order.status === 'new' && (
+          <button
+            className={secondaryButtonClass + ' w-auto px-4'}
+            onClick={() => navigate(`/orders/${order.id}/edit`)}
+          >
+            {t('edit_order')}
+          </button>
+        )}
       </div>
 
       {/* Header */}
