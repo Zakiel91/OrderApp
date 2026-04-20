@@ -58,7 +58,13 @@ export const COLLECTIONS_BY_TYPE: Record<string, string[]> = {
 export const ORDER_PURPOSE_OPTIONS = ['upid', 'memo'] as const
 
 // Certificate options
-export const CERTIFICATE_OPTIONS = ['sgs', 'cgl', 'sushi', 'none'] as const
+export const CERTIFICATE_OPTIONS = ['sgl', 'cgl', 'sushi', 'none'] as const
+
+export function formatDateIL(dateStr: string): string {
+  const [y, m, d] = dateStr.split('-')
+  if (!y || !m || !d) return dateStr
+  return `${d}/${m}/${y}`
+}
 
 // Advance payment methods
 export const PAYMENT_METHODS = ['cash', 'credit_card', 'bank_wire'] as const

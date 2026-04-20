@@ -3,6 +3,7 @@ import { useFixForm } from '../context/FixFormContext'
 import { useLanguage } from '../context/LanguageContext'
 import { buttonClass } from '../components/FormField'
 import { createOrder, updateOrder, saveClientIfNew } from '../lib/api'
+import { formatDateIL } from '../lib/constants'
 import { uploadOrderImages } from '../lib/imageUtils'
 
 function ReviewSection({ title, children }: { title: string; children: React.ReactNode }) {
@@ -136,7 +137,7 @@ export function FixStep3Review() {
         <ReviewRow label={t('fix_description')} value={form.description} />
         <ReviewRow label={t('fix_comment')} value={form.comment} />
         <ReviewRow label={t('price_to_client')} value={form.price_to_client ? `$${form.price_to_client}` : ''} />
-        <ReviewRow label={t('deadline')} value={form.deadline} />
+        <ReviewRow label={t('deadline')} value={form.deadline ? formatDateIL(form.deadline) : ''} />
         {form.image_files.length > 0 && (
           <ReviewRow label={t('images')} value={`${form.image_files.length} ${t('images_attached')}`} />
         )}

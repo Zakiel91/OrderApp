@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router'
 import { useLanguage } from '../context/LanguageContext'
 import { getOrder, deleteOrder } from '../lib/api'
 import { getImageUrl } from '../lib/imageUtils'
+import { formatDateIL } from '../lib/constants'
 import { secondaryButtonClass } from '../components/FormField'
 import type { Order } from '../lib/types'
 
@@ -129,7 +130,7 @@ export function OrderDetailPage() {
         <DetailRow label={t('side_stones')} value={order.side_stones} />
         <DetailRow label={t('prong_type')} value={order.cat_claw} />
         <DetailRow label={t('price_to_client')} value={order.price_to_client ? `$${order.price_to_client}` : undefined} />
-        <DetailRow label={t('deadline')} value={order.deadline} />
+        <DetailRow label={t('deadline')} value={order.deadline ? formatDateIL(order.deadline) : undefined} />
         <DetailRow label={t('comment')} value={order.comment} />
       </div>
 

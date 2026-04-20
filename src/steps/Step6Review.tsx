@@ -3,6 +3,7 @@ import { useOrderForm } from '../context/OrderFormContext'
 import { useLanguage } from '../context/LanguageContext'
 import { buttonClass } from '../components/FormField'
 import { createOrder, updateOrder, saveClientIfNew } from '../lib/api'
+import { formatDateIL } from '../lib/constants'
 import { uploadOrderImages } from '../lib/imageUtils'
 
 function ReviewRow({ label, value }: { label: string; value: string | undefined }) {
@@ -189,7 +190,7 @@ export function Step6Review() {
         <ReviewRow label={t('cgl_price_details')} value={form.cgl_price_details} />
         <ReviewRow label={t('order_purpose')} value={form.order_purpose ? form.order_purpose.toUpperCase() : ''} />
         <ReviewRow label={t('price_to_client')} value={form.price_to_client ? `$${form.price_to_client}` : ''} />
-        <ReviewRow label={t('deadline')} value={form.deadline} />
+        <ReviewRow label={t('deadline')} value={form.deadline ? formatDateIL(form.deadline) : ''} />
         <ReviewRow label={t('advance_amount')} value={form.advance_amount ? `$${form.advance_amount}` : ''} />
         <ReviewRow label={t('advance_method')} value={form.advance_method ? t(`payment_${form.advance_method}`) : ''} />
         <ReviewRow label={t('special_instructions')} value={form.special_instructions} />
