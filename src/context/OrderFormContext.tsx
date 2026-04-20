@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react'
 import { type OrderFormData, INITIAL_FORM_DATA } from '../lib/types'
+import { useWizardNav } from './WizardNavContext'
 
 interface OrderFormContextType {
   form: OrderFormData
@@ -9,6 +10,8 @@ interface OrderFormContextType {
   step: number
   setStep: (s: number) => void
   totalSteps: number
+  submitHandler: (() => Promise<void>) | null
+  registerSubmitHandler: (fn: (() => Promise<void>) | null) => void
 }
 
 const STORAGE_KEY = 'order_draft'
@@ -46,8 +49,22 @@ export function OrderFormProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem(STORAGE_KEY)
   }, [])
 
+  const [submitHandler, setSubmitHandler] = useState<(() => Promise<void>) | null>(null)
+  const registerSubmitHandler = useCallback((fn: (() => Promise<void>) | null) => {
+    setSubmitHandler(() => fn)  // стрелочная функция ОБЯЗАТЕЛЬНА — иначе React вызовет fn как updater
+  }, [])
+
+  const { setWizardState } = useWizardNav()
+  useEffect(() => {
+    setWizardState({ step, totalSteps, setStep, submitHandler, submitting: false })
+    return () => setWizardState(null)
+  }, [step, totalSteps, setStep, submitHandler, setWizardState])
+
   return (
-    <OrderFormContext.Provider value={{ form, updateField, updateFields, resetForm, step, setStep, totalSteps }}>
+    <OrderFormContext.Provider value={{
+      form, updateField, updateFields, resetForm, step, setStep, totalSteps,
+      submitHandler, registerSubmitHandler,
+    }}>
       {children}
     </OrderFormContext.Provider>
   )
