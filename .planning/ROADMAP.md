@@ -90,7 +90,11 @@ Plans:
   1. A salesperson can tap an order in "My Orders" that is still pending and edit its details, then save the changes
   2. My Orders shows the total count of orders and a search/filter bar that narrows the list as the salesperson types or selects a filter
   3. When the orders list fails to load (network error, server error), the salesperson sees a clear error message — not a silent empty list
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Worker ownership + status checks (T-4-01, T-4-02) + i18n keys + EditOrderPage + OrderDetailPage Edit button + App.tsx route (FEAT-01)
+- [ ] 04-02-PLAN.md — MyOrdersPage: search/filter bar, order count, error card with Retry (FEAT-02, FEAT-03)
 **UI hint**: yes
 
 ---
@@ -103,7 +107,7 @@ Plans:
 | 1. Security & Data Integrity | 2/2 | Done | 2026-04-20 |
 | 2. Mobile UX Foundation | 3/3 | Done | 2026-04-20 |
 | 3. Wizard Polish | 2/2 | Done | 2026-04-20 |
-| 4. Orders Features | 0/3 | Not started | - |
+| 4. Orders Features | 0/2 | Not started | - |
 
 ---
 
