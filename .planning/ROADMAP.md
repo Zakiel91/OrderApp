@@ -11,8 +11,8 @@
 - [x] **Phase 0: Completed This Session** — BUG-01, BUG-02, BUG-03 resolved in prior session work
 - [x] **Phase 1: Security & Data Integrity** — Strip dev PIN from production; prevent image blobs in localStorage
 - [x] **Phase 2: Mobile UX Foundation** — Scroll resets, fixed bottom nav, thumb-friendly tap targets (complete 2026-04-20)
-- [ ] **Phase 3: Wizard Polish** — Step indicator, draft saved indicator, smooth step transitions
-- [ ] **Phase 4: Orders Features** — Edit UI for pending orders, search/filter bar, error states
+- [x] **Phase 3: Wizard Polish** — Step indicator, draft saved indicator, smooth step transitions (complete 2026-04-20)
+- [x] **Phase 4: Orders Features** — Edit UI for pending orders, search/filter bar, error states (complete 2026-04-21)
 
 ---
 

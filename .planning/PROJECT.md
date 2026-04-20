@@ -55,21 +55,21 @@ The app already works, but the mobile UX is rough: screens jump on navigation, b
 - ✓ Order detail + delete
 - ✓ Draft saved in localStorage
 
-### Active (this milestone)
-- [ ] **UX-01** Scroll position resets to top on step change (no more jumping)
-- [ ] **UX-02** Step indicator shows current position visually on every step screen
-- [ ] **UX-03** All tap targets ≥ 48px height (thumb-friendly)
-- [ ] **UX-04** Draft saved indicator visible in the wizard (e.g. "Draft saved ✓")
-- [ ] **UX-05** Smooth step transitions (no jarring layout shift)
-- [ ] **UX-06** Bottom navigation stays fixed — buttons never scroll off screen
-- [ ] **BUG-01** JWT issued at login — API calls succeed for all users
-- [ ] **BUG-02** Server-side order filtering by salesman (already done ✓)
-- [ ] **BUG-03** Delete restricted to own orders (already done ✓)
-- [ ] **BUG-04** Dev PIN 9119 stripped from production build
-- [ ] **BUG-05** `image_files` stripped before localStorage serialise in OrderFormContext
-- [ ] **FEAT-01** Order edit UI — salespeople can edit their own pending orders
-- [ ] **FEAT-02** "My Orders" shows order count and has a search/filter bar
-- [ ] **FEAT-03** Error message shown when orders fail to load (not silent empty list)
+### Validated (this milestone — complete 2026-04-21)
+- [x] **UX-01** Scroll position resets to top on step change — Validated in Phase 2
+- [x] **UX-02** Step indicator shows current position visually on every step screen — Validated in Phase 3
+- [x] **UX-03** All tap targets ≥ 48px height (thumb-friendly) — Validated in Phase 2
+- [x] **UX-04** Draft saved indicator visible in the wizard — Validated in Phase 3
+- [x] **UX-05** Smooth step transitions (no jarring layout shift) — Validated in Phase 3
+- [x] **UX-06** Bottom navigation stays fixed — buttons never scroll off screen — Validated in Phase 2
+- [x] **BUG-01** JWT issued at login — API calls succeed for all users — Validated in Phase 0
+- [x] **BUG-02** Server-side order filtering by salesman — Validated in Phase 0
+- [x] **BUG-03** Delete restricted to own orders — Validated in Phase 0
+- [x] **BUG-04** Dev PIN 9119 stripped from production build — Validated in Phase 1
+- [x] **BUG-05** `image_files` stripped before localStorage serialise — Validated in Phase 1
+- [x] **FEAT-01** Order edit UI — salespeople can edit their own pending orders — Validated in Phase 4
+- [x] **FEAT-02** "My Orders" shows order count and has a search/filter bar — Validated in Phase 4
+- [x] **FEAT-03** Error message shown when orders fail to load — Validated in Phase 4
 
 ### Out of Scope
 - Hard mandatory field blocking ("next" always works) — user preference
@@ -117,4 +117,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-20 after initialization*
+*Last updated: 2026-04-21 — Milestone "Mobile UX Overhaul" complete. All 14 requirements validated across Phases 0–4.*
