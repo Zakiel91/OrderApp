@@ -23,7 +23,7 @@ export function EditOrderPage() {
       getOrder(parseInt(id))
         .then(o => {
           if (o.status !== 'new') {
-            setError(t('error'))
+            setError(t('edit_not_allowed'))
           } else {
             setOrder(o)
             setFormData({
