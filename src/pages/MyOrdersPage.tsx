@@ -88,7 +88,7 @@ export function MyOrdersPage() {
         <h1 className="text-lg font-bold">{t('nav_orders')}</h1>
         <span className="text-xs text-[var(--color-text-muted)]">
           {isFiltered
-            ? t('orders_filtered', { filtered: String(filteredOrders.length), total: String(total) })
+            ? t('orders_filtered', { filtered: String(filteredOrders.length), total: String(orders.length) })
             : t('orders_count', { count: String(total) })}
         </span>
         {user && (
