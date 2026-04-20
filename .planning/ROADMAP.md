@@ -76,7 +76,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — DraftSavedToast component + draft_saved i18n keys (en/he/ru) + CSS keyframes (fadeIn, slideInLeft, slideInRight) (UX-04, UX-05 foundations)
+- [x] 03-01-PLAN.md — DraftSavedToast component + draft_saved i18n keys (en/he/ru) + CSS keyframes (fadeIn, slideInLeft, slideInRight) (UX-04, UX-05 foundations)
 - [ ] 03-02-PLAN.md — Wire toast + direction-aware transitions into NewOrderPage and FixOrderPage; verify UX-02 (UX-02, UX-04, UX-05)
 **UI hint**: yes
 
@@ -102,7 +102,7 @@ Plans:
 | 0. Completed This Session | 3/3 | Done | 2026-04-19 |
 | 1. Security & Data Integrity | 2/2 | Done | 2026-04-20 |
 | 2. Mobile UX Foundation | 3/3 | Done | 2026-04-20 |
-| 3. Wizard Polish | 0/2 | Ready to execute | - |
+| 3. Wizard Polish | 1/2 | In progress | - |
 | 4. Orders Features | 0/3 | Not started | - |
 
 ---
