@@ -93,7 +93,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Worker ownership + status checks (T-4-01, T-4-02) + i18n keys + EditOrderPage + OrderDetailPage Edit button + App.tsx route (FEAT-01)
+- [x] 04-01-PLAN.md — Worker ownership + status checks (T-4-01, T-4-02) + i18n keys + EditOrderPage + OrderDetailPage Edit button + App.tsx route (FEAT-01)
 - [ ] 04-02-PLAN.md — MyOrdersPage: search/filter bar, order count, error card with Retry (FEAT-02, FEAT-03)
 **UI hint**: yes
 
@@ -107,7 +107,7 @@ Plans:
 | 1. Security & Data Integrity | 2/2 | Done | 2026-04-20 |
 | 2. Mobile UX Foundation | 3/3 | Done | 2026-04-20 |
 | 3. Wizard Polish | 2/2 | Done | 2026-04-20 |
-| 4. Orders Features | 0/2 | Not started | - |
+| 4. Orders Features | 1/2 | In progress | - |
 
 ---
 
@@ -126,7 +126,7 @@ Plans:
 | UX-02 | Phase 3 | Complete |
 | UX-04 | Phase 3 | Complete |
 | UX-05 | Phase 3 | Complete |
-| FEAT-01 | Phase 4 | Pending |
+| FEAT-01 | Phase 4 | Complete |
 | FEAT-02 | Phase 4 | Pending |
 | FEAT-03 | Phase 4 | Pending |
 
