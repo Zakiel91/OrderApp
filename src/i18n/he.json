@@ -210,5 +210,6 @@
   "fix_submitted": "הזמנת תיקון נשלחה!",
   "fix_order_number": "מספר הזמנת תיקון",
   "fix_create_another": "יצירת הזמנת תיקון נוספת",
-  "fix_submit": "שלח הזמנת תיקון"
+  "fix_submit": "שלח הזמנת תיקון",
+  "draft_saved": "טיוטה נשמרה"
 }

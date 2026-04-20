@@ -210,5 +210,6 @@
   "fix_submitted": "Fix Order Submitted!",
   "fix_order_number": "Fix Order Number",
   "fix_create_another": "Create Another Fix Order",
-  "fix_submit": "Submit Fix Order"
+  "fix_submit": "Submit Fix Order",
+  "draft_saved": "Draft saved"
 }
