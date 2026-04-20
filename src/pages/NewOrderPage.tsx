@@ -1,9 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useOrderForm } from '../context/OrderFormContext'
 import { useAuth } from '../context/AuthContext'
-import { useLanguage } from '../context/LanguageContext'
 import { ProgressBar } from '../components/ProgressBar'
-import { buttonClass, secondaryButtonClass } from '../components/FormField'
 import { Step2Client } from '../steps/Step2Client'
 import { Step3Product } from '../steps/Step3Product'
 import { Step4Stones } from '../steps/Step4Stones'
@@ -14,9 +12,8 @@ import { Step6Review } from '../steps/Step6Review'
 const STEPS = [Step2Client, Step3Product, Step4Stones, Step5Costs, Step6Review]
 
 export function NewOrderPage() {
-  const { form, updateField, step, setStep, totalSteps } = useOrderForm()
+  const { form, updateField, step, totalSteps } = useOrderForm()
   const { user } = useAuth()
-  const { t } = useLanguage()
   const StepComponent = STEPS[step - 1]
 
   // Auto-set order basics from logged-in user
@@ -35,30 +32,17 @@ export function NewOrderPage() {
     }
   }, [user, form.order_prefix, form.salesman_name, form.order_date, updateField])
 
+  // UX-01: scroll to top on step change (per D-04, D-05, D-06)
+  const isFirstRender = useRef(true)
+  useEffect(() => {
+    if (isFirstRender.current) { isFirstRender.current = false; return }
+    window.scrollTo(0, 0)
+  }, [step])
+
   return (
     <div className="pb-28">
       <ProgressBar current={step} total={totalSteps} />
       <StepComponent />
-
-      {step < totalSteps && (
-        <div className="p-4 flex gap-3">
-          {step > 1 && (
-            <button className={secondaryButtonClass} onClick={() => setStep(step - 1)}>
-              {t('back')}
-            </button>
-          )}
-          <button className={buttonClass} onClick={() => setStep(step + 1)}>
-            {t('next')}
-          </button>
-        </div>
-      )}
-      {step === totalSteps && step > 1 && (
-        <div className="px-4">
-          <button className={secondaryButtonClass} onClick={() => setStep(step - 1)}>
-            {t('back')}
-          </button>
-        </div>
-      )}
     </div>
   )
 }
