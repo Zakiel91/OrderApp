@@ -38,6 +38,7 @@ export function OrderDetailPage() {
   const [loading, setLoading] = useState(true)
   const [deleting, setDeleting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
 
   useEffect(() => {
     if (id) {
@@ -55,7 +56,7 @@ export function OrderDetailPage() {
       await deleteOrder(order.id)
       navigate('/orders')
     } catch {
-      alert('Failed to delete')
+      setDeleteError(t('delete_error'))
     } finally {
       setDeleting(false)
     }
@@ -105,6 +106,12 @@ export function OrderDetailPage() {
           </button>
         )}
       </div>
+
+      {deleteError && (
+        <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3 mb-4">
+          <p className="text-sm text-red-400">{deleteError}</p>
+        </div>
+      )}
 
       {/* Header */}
       <div className="bg-[var(--color-surface)] rounded-xl p-4 mb-4">
