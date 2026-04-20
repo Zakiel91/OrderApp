@@ -78,7 +78,7 @@ export function Step2Client() {
               client_db_id: 0, client_name: '', client_id: '', client_company_number: '',
               client_phone: '', client_email: '', client_address: '', client_country: '',
             }))}
-            className="text-xs px-2 py-1 rounded-md"
+            className="text-xs px-2 min-h-[48px] flex items-center rounded-md"
             style={{ color: 'var(--color-text-muted)', border: '1px solid var(--color-border)' }}
           >
             Clear
@@ -140,7 +140,7 @@ export function Step2Client() {
           <button
             type="button"
             onMouseDown={e => { e.preventDefault(); doNameSearch(form.client_name) }}
-            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md"
+            className="absolute right-2 top-1/2 -translate-y-1/2 min-h-[48px] min-w-[48px] flex items-center justify-center rounded-md"
             style={{ color: 'var(--color-text-muted)', opacity: form.client_name ? 1 : 0.3 }}
           >
             {nameSearching ? (
@@ -178,16 +178,16 @@ export function Step2Client() {
             </span>
             <span className="text-[var(--color-text-muted)] text-xs ms-1 opacity-50">({t('optional')})</span>
           </label>
-          <div className="flex rounded-lg overflow-hidden border border-[var(--color-border)] text-[12px]">
+          <div className="flex border border-[var(--color-border)] text-[12px]">
             <button type="button"
               onClick={() => updateField('client_company_number', '')}
-              className="px-3 py-1 font-medium transition-colors"
+              className="px-3 min-h-[48px] flex items-center justify-center font-medium transition-colors rounded-l-lg"
               style={{ background: idType === 'id' ? 'var(--color-primary)' : 'transparent', color: idType === 'id' ? '#fff' : 'var(--color-text-muted)' }}>
               Person
             </button>
             <button type="button"
               onClick={() => updateField('client_id', '')}
-              className="px-3 py-1 font-medium transition-colors"
+              className="px-3 min-h-[48px] flex items-center justify-center font-medium transition-colors rounded-r-lg border-l border-[var(--color-border)]"
               style={{ background: idType === 'company' ? 'var(--color-primary)' : 'transparent', color: idType === 'company' ? '#fff' : 'var(--color-text-muted)' }}>
               Company
             </button>
