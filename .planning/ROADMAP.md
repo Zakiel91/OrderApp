@@ -55,7 +55,12 @@ Plans:
   1. When a salesperson taps Next or Back, the new step renders with scroll position at the top (no mid-page start)
   2. The Back and Next buttons are always visible without scrolling, regardless of step content length
   3. Every tappable control in the wizard (buttons, inputs, selects, checkboxes) has a touch target of at least 48px in height
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — WizardNavContext + extend OrderFormContext/FixFormContext + register submit in Step6Review/FixStep3Review (UX-06 foundation)
+- [ ] 02-02-PLAN.md — BottomNav wizard mode (Back/Next/Submit) + scroll reset + remove inline buttons (UX-01, UX-06)
+- [ ] 02-03-PLAN.md — Touch target fixes in Step2Client and Step4Stones (UX-03)
 **UI hint**: yes
 
 ---
@@ -92,7 +97,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 0. Completed This Session | 3/3 | Done | 2026-04-19 |
 | 1. Security & Data Integrity | 2/2 | Done | 2026-04-20 |
-| 2. Mobile UX Foundation | 0/2 | Not started | - |
+| 2. Mobile UX Foundation | 0/3 | Not started | - |
 | 3. Wizard Polish | 0/2 | Not started | - |
 | 4. Orders Features | 0/3 | Not started | - |
 
