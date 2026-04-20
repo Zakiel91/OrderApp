@@ -45,7 +45,7 @@ Declared values (multiples of 4 only). All existing Tailwind utility classes fol
 
 Exceptions:
 - Page bottom padding: `pb-24` (96px) — established Phase 2 to clear fixed BottomNav; all pages use this.
-- Minimum touch target: `min-h-[48px]` on all interactive elements (Phase 2 contract UX-03). Inputs use `min-h-[50px]` from inputClass. Primary button uses `min-h-[52px]` from buttonClass.
+- Minimum touch target: `min-h-[48px]` on all interactive elements (Phase 2 contract UX-03). Inputs use `min-h-[48px]` from inputClass. Primary button uses `min-h-[52px]` from buttonClass.
 - Search input row + status dropdown row: minimum `min-h-[48px]` each (touch target requirement).
 - Order count label: `text-xs` inline element — not a touch target, no minimum height required.
 
@@ -58,11 +58,13 @@ All values extracted from `src/index.css` and confirmed in component patterns.
 | Role | Size | Weight | Font | Line Height | Usage |
 |------|------|--------|------|-------------|-------|
 | Body | 17px | 400 (regular) | Inter | 1.5 | Form inputs, order card details, paragraph text |
-| Label | 15px | 500 (medium) | Inter | 1.4 | FormField labels, button text, muted captions, filter controls |
+| Label | 15px | 400 (regular) | Inter | 1.4 | FormField labels, button text, muted captions, filter controls |
 | Subtext | 13px | 400 (regular) | Inter | 1.4 | Metadata text (order date in card), count badge, hints |
 | Page heading | 18px (`text-lg`) | 700 (bold) | Inter | 1.2 | Page titles (My Orders, order number as edit page title) |
 
 Notes:
+- Declared weights: 400 (regular) and 700 (bold) only. Weight 500 (medium) is not used.
+- FormField labels use `font-normal` (weight 400).
 - Section headings within OrderDetailPage use `text-lg font-bold` (18px/700) — apply same to EditOrderPage title.
 - Heading font (Playfair Display) is NOT used in pages/components — only for h1/h2/h3 elements defined via global CSS. All page-level titles use Inter via Tailwind utility classes. Do not introduce Playfair in Phase 4.
 - Status badge text: `text-xs` (12px) — existing pattern from STATUS_COLORS, do not change.
@@ -164,13 +166,13 @@ All inputs use `inputClass`. All textareas use `inputClass` + explicit `rows={3}
 
 **Cancel action:** `navigate(\`/orders/${id}\`)` — no confirmation, no destructive action.
 
-**Touch targets:** All inputs `min-h-[50px]` (from inputClass). Save/Cancel buttons `min-h-[50px]` (from secondaryButtonClass/buttonClass). FormField label area is non-interactive, no touch target requirement.
+**Touch targets:** All inputs `min-h-[48px]` (from inputClass). Save/Cancel buttons `min-h-[48px]` (from secondaryButtonClass/buttonClass). FormField label area is non-interactive, no touch target requirement.
 
 **Edit button in OrderDetailPage:**
 - Placement: top action row alongside Back and Delete buttons — `flex gap-2 mb-4`
 - Conditional: only rendered when `order.status === 'new'`
 - Style: `secondaryButtonClass` with `w-auto px-4` (not full-width)
-- Label: `t('edit')` — new i18n key
+- Label: `t('edit_order')` — i18n key declared in Copywriting Contract below
 
 ---
 
@@ -242,9 +244,8 @@ All strings must exist in all three locale files: `en.json`, `ru.json`, `he.json
 
 | Element | i18n Key | English Copy | Russian Copy | Hebrew Copy | Source |
 |---------|----------|-------------|-------------|-------------|--------|
-| Edit button | `edit` | "Edit" | "Редактировать" | "ערוך" | New — FEAT-01 |
+| Edit button | `edit_order` | "Edit Order" | "Редактировать заказ" | "ערוך הזמנה" | New — FEAT-01 |
 | Save Changes button (CTA) | `save_changes` | "Save Changes" | "Сохранить изменения" | "שמור שינויים" | New — FEAT-01 |
-| Edit page title context | `edit_order` | "Edit Order" | "Редактировать заказ" | "ערוך הזמנה" | New — FEAT-01 (used in document title or aria-label if needed) |
 | Save error (inline) | `save_error` | "Failed to save. Please try again." | "Не удалось сохранить. Попробуйте снова." | "שמירה נכשלה. נסה שוב." | New — FEAT-01 |
 | Search placeholder | `search_orders` | "Search orders..." | "Поиск заказов..." | "חיפוש הזמנות..." | New — FEAT-02 |
 | All statuses option | `all_statuses` | "All statuses" | "Все статусы" | "כל הסטטוסים" | New — FEAT-02 |
