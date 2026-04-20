@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useOrderForm } from '../context/OrderFormContext'
 import { useLanguage } from '../context/LanguageContext'
 import { buttonClass } from '../components/FormField'
@@ -25,15 +25,13 @@ function ReviewSection({ title, children }: { title: string; children: React.Rea
 }
 
 export function Step6Review() {
-  const { form, resetForm } = useOrderForm()
+  const { form, resetForm, registerSubmitHandler } = useOrderForm()
   const { t } = useLanguage()
-  const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [orderNumber, setOrderNumber] = useState('')
   const [error, setError] = useState('')
 
-  const handleSubmit = async () => {
-    setSubmitting(true)
+  const handleSubmit = useCallback(async () => {
     setError('')
     try {
       const payload: Record<string, unknown> = {
@@ -118,8 +116,12 @@ export function Step6Review() {
     } catch (err) {
       setError(err instanceof Error ? err.message : t('error'))
     }
-    setSubmitting(false)
-  }
+  }, [form, t, resetForm])
+
+  useEffect(() => {
+    registerSubmitHandler(handleSubmit)
+    return () => registerSubmitHandler(null)
+  }, [handleSubmit, registerSubmitHandler])
 
   if (submitted) {
     return (
@@ -201,14 +203,6 @@ export function Step6Review() {
           {error}
         </div>
       )}
-
-      <button
-        className={buttonClass}
-        onClick={handleSubmit}
-        disabled={submitting}
-      >
-        {submitting ? t('loading') : t('submit_order')}
-      </button>
     </div>
   )
 }

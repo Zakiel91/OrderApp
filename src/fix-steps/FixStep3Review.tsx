@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useFixForm } from '../context/FixFormContext'
 import { useLanguage } from '../context/LanguageContext'
 import { buttonClass } from '../components/FormField'
@@ -27,14 +27,12 @@ function ReviewRow({ label, value }: { label: string; value?: string }) {
 }
 
 export function FixStep3Review() {
-  const { form, resetForm } = useFixForm()
+  const { form, resetForm, registerSubmitHandler } = useFixForm()
   const { t } = useLanguage()
-  const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = async () => {
-    setSubmitting(true)
+  const handleSubmit = useCallback(async () => {
     setError(null)
     try {
       const payload = {
@@ -89,10 +87,13 @@ export function FixStep3Review() {
       setSuccess(result.order_number)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to submit')
-    } finally {
-      setSubmitting(false)
     }
-  }
+  }, [form, t, resetForm])
+
+  useEffect(() => {
+    registerSubmitHandler(handleSubmit)
+    return () => registerSubmitHandler(null)
+  }, [handleSubmit, registerSubmitHandler])
 
   if (success) {
     return (
@@ -144,10 +145,6 @@ export function FixStep3Review() {
       {error && (
         <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3 mb-4 text-red-400 text-sm">{error}</div>
       )}
-
-      <button className={buttonClass} onClick={handleSubmit} disabled={submitting}>
-        {submitting ? t('submitting') : t('fix_submit')}
-      </button>
     </div>
   )
 }

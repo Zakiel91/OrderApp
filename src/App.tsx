@@ -3,6 +3,7 @@ import { LanguageProvider } from './context/LanguageContext'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { OrderFormProvider } from './context/OrderFormContext'
 import { FixFormProvider } from './context/FixFormContext'
+import { WizardNavProvider } from './context/WizardNavContext'
 import { BottomNav } from './components/BottomNav'
 import { LoginPage } from './pages/LoginPage'
 import { MyOrdersPage } from './pages/MyOrdersPage'
@@ -23,27 +24,29 @@ function AppRoutes() {
   }
 
   return (
-    <>
-      <div className="max-w-lg mx-auto min-h-screen pb-[68px]">
-        <Routes>
-          <Route path="/orders" element={<MyOrdersPage />} />
-          <Route path="/orders/new" element={
-            <OrderFormProvider>
-              <NewOrderPage />
-            </OrderFormProvider>
-          } />
-          <Route path="/orders/fix" element={
-            <FixFormProvider>
-              <FixOrderPage />
-            </FixFormProvider>
-          } />
-          <Route path="/orders/:id" element={<OrderDetailPage />} />
-          <Route path="/settings" element={<SettingsPage />} />
-          <Route path="*" element={<Navigate to="/orders" replace />} />
-        </Routes>
-      </div>
-      <BottomNav />
-    </>
+    <WizardNavProvider>
+      <>
+        <div className="max-w-lg mx-auto min-h-screen pb-[68px]">
+          <Routes>
+            <Route path="/orders" element={<MyOrdersPage />} />
+            <Route path="/orders/new" element={
+              <OrderFormProvider>
+                <NewOrderPage />
+              </OrderFormProvider>
+            } />
+            <Route path="/orders/fix" element={
+              <FixFormProvider>
+                <FixOrderPage />
+              </FixFormProvider>
+            } />
+            <Route path="/orders/:id" element={<OrderDetailPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="*" element={<Navigate to="/orders" replace />} />
+          </Routes>
+        </div>
+        <BottomNav />
+      </>
+    </WizardNavProvider>
   )
 }
 
