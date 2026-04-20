@@ -1,7 +1,8 @@
 ---
 phase: 3
 slug: wizard-polish
-status: draft
+status: approved
+reviewed_at: 2026-04-20
 shadcn_initialized: false
 preset: none
 created: 2026-04-20
@@ -53,18 +54,21 @@ Source: existing Tailwind classes observed in `BottomNav.tsx`, `NewOrderPage.tsx
 
 ## Typography
 
+Declared weights: 2 maximum — `400 (regular)` and `700 (bold)`.
+
 | Role | Size | Weight | Line Height |
 |------|------|--------|-------------|
 | Body | 17px | 400 (regular) | 1.5 |
-| Label | 15px | 500 (medium) | 1.4 |
+| Label | 15px | 400 (regular) | 1.4 |
 | Caption / muted | 11–14px | 400 (regular) | 1.4 |
 | Heading (h1) | 28px (1.75rem) | 700 (bold) | 1.2 |
 
 Notes:
 - Body 17px is the declared `font-size` on `body` in `src/index.css` — do not deviate
 - Label 15px is the established `text-[15px]` in `FormField.tsx` and button classes
-- Toast chip text: 14px, weight 500 — small enough to be unobtrusive, legible at a glance
+- Toast chip text: 14px, weight 400 (regular) — small enough to be unobtrusive, legible at a glance
 - Step indicator text in `ProgressBar.tsx`: `text-sm` (14px), `text-[var(--color-text-muted)]`
+- No `font-weight-medium` (500) — any element previously specified as 500 uses 400 instead
 
 Source: `src/index.css` body declaration, `src/components/FormField.tsx` class constants.
 
