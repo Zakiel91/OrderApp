@@ -61,7 +61,7 @@ export function Step4Stones() {
                 <button
                   type="button"
                   onClick={() => removeStone(stone)}
-                  className="text-[var(--color-text-muted)] hover:text-[var(--color-error)] text-xs ml-0.5"
+                  className="text-[var(--color-text-muted)] hover:text-[var(--color-error)] text-xs ml-0.5 min-h-[48px] flex items-center"
                 >
                   ✕
                 </button>
@@ -84,7 +84,7 @@ export function Step4Stones() {
                 {stoneResults.map((s, i) => (
                   <li
                     key={i}
-                    className="px-3 py-2.5 cursor-pointer hover:bg-[var(--color-surface-light)] text-sm min-h-[44px] flex items-center justify-between"
+                    className="px-3 py-2.5 cursor-pointer hover:bg-[var(--color-surface-light)] text-sm min-h-[48px] flex items-center justify-between"
                     onClick={() => addStone(s.parcel_name)}
                   >
                     <span className="font-medium">{s.parcel_name}</span>
