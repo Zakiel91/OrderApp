@@ -45,6 +45,8 @@ export function Step6Review() {
         client_email: form.client_email || undefined,
         client_address: form.client_address || undefined,
         client_country: form.client_country || undefined,
+        client_teudat: form.client_id || undefined,
+        client_company_number: form.client_company_number || undefined,
         salesman_name: form.salesman_name,
         jewelry_type: form.jewelry_type,
         metal: form.metal,
