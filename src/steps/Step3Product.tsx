@@ -77,7 +77,7 @@ export function Step3Product() {
                 if (jt.key !== 'other') setOtherType('')
               }}
               className={`flex flex-col items-center justify-center p-3 rounded-xl min-h-[72px] transition-all ${
-                form.jewelry_type === jt.key
+                (jt.key === 'ring' ? (form.jewelry_type === 'ring' || form.jewelry_type === 'eternity') : form.jewelry_type === jt.key)
                   ? 'bg-[var(--color-primary)] text-white scale-[1.02] shadow-lg'
                   : 'bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-border)]'
               }`}
@@ -91,6 +91,42 @@ export function Step3Product() {
           ))}
         </div>
       </FormField>
+
+      {/* Ring style sub-selector — shown when ring or eternity is active */}
+      {(form.jewelry_type === 'ring' || form.jewelry_type === 'eternity') && (
+        <FormField label={t('ring_style')}>
+          <div className="flex flex-wrap gap-2">
+            {([
+              { label: t('regular_ring'), jt: 'ring' as const, et: '' as const },
+              { label: t('full_eternity'), jt: 'eternity' as const, et: 'full' as const },
+              { label: t('half_eternity'), jt: 'eternity' as const, et: 'half' as const },
+              { label: t('three_quarter_eternity'), jt: 'eternity' as const, et: '3/4' as const },
+            ] as const).map(opt => {
+              const active =
+                form.jewelry_type === opt.jt &&
+                (opt.jt === 'ring' ? !form.eternity_type : form.eternity_type === opt.et)
+              return (
+                <button
+                  key={opt.label}
+                  type="button"
+                  onClick={() => {
+                    updateField('jewelry_type', opt.jt)
+                    updateField('eternity_type', opt.et)
+                    updateField('collection_style', '')
+                  }}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium min-h-[44px] transition-colors ${
+                    active
+                      ? 'bg-[var(--color-primary)] text-white'
+                      : 'bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-border)]'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              )
+            })}
+          </div>
+        </FormField>
+      )}
 
       {form.jewelry_type === 'other' && (
         <FormField label={t('other_type_describe')} required>

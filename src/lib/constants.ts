@@ -9,7 +9,6 @@ export const JEWELRY_TYPES = [
   { key: 'pendant', icon: 'pendant' },
   { key: 'necklace', icon: 'necklace' },
   { key: 'bracelet', icon: 'bracelet' },
-  { key: 'eternity', icon: 'eternity' },
   { key: 'other', icon: 'other' },
 ] as const
 
