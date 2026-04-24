@@ -13,6 +13,7 @@
 - [x] **Phase 2: Mobile UX Foundation** — Scroll resets, fixed bottom nav, thumb-friendly tap targets (complete 2026-04-20)
 - [x] **Phase 3: Wizard Polish** — Step indicator, draft saved indicator, smooth step transitions (complete 2026-04-20)
 - [x] **Phase 4: Orders Features** — Edit UI for pending orders, search/filter bar, error states (complete 2026-04-21)
+- [ ] **Phase 5: Order Detail Redesign** — iPhone-native order detail page: sticky header, tabs, bottom sheet editing
 
 ---
 
@@ -99,6 +100,25 @@ Plans:
 
 ---
 
+### Phase 5: Order Detail Redesign
+**Goal**: The order detail page feels like a native iPhone receipt — sticky header with quick actions, tabbed sections, and tap-to-edit fields that open a bottom sheet
+**Depends on**: Phase 4
+**Requirements**: DET-01, DET-02, DET-03, DET-04
+**Success Criteria** (what must be TRUE):
+  1. The order detail page shows a sticky header with the order number, status pill, and quick-action buttons (WhatsApp, Edit, Delete) that remain visible while scrolling
+  2. Content is organized in 4 tabs (Client / Item / Payment / Notes) — no single long scroll
+  3. Tapping any editable field opens a bottom sheet; salesperson edits the value and taps Save; the change is persisted to the server
+  4. The page uses the iOS system palette (`#f2f2f7` background, white cards, `var(--color-primary)` blue), SF Pro font stack, and 50px minimum row height
+**Plans**: 3 plans
+**Design**: `.claude/skills/sketch-findings-OrderApp/` (validated design decisions from sketch sessions 001, 002)
+
+Plans:
+- [ ] 05-01-PLAN.md — iOS design tokens + slideUp keyframe in index.css + 8 new i18n keys in he/en/ru (DET-04)
+- [ ] 05-02-PLAN.md — Create FieldEditSheet.tsx component — bottom sheet with slideUp animation, save/cancel logic (DET-03, DET-04)
+- [ ] 05-03-PLAN.md — Rewrite OrderDetailPage.tsx — sticky header, 4 tabs, FieldEditSheet integration, PUT via updateOrder (DET-01, DET-02, DET-03, DET-04)
+
+---
+
 ## Progress Table
 
 | Phase | Plans Complete | Status | Completed |
@@ -108,6 +128,7 @@ Plans:
 | 2. Mobile UX Foundation | 3/3 | Done | 2026-04-20 |
 | 3. Wizard Polish | 2/2 | Done | 2026-04-20 |
 | 4. Orders Features | 2/2 | Done | 2026-04-21 |
+| 5. Order Detail Redesign | 0/3 | Planning | — |
 
 ---
 
@@ -130,4 +151,9 @@ Plans:
 | FEAT-02 | Phase 4 | Complete |
 | FEAT-03 | Phase 4 | Complete |
 
-**Total: 14/14 requirements mapped. Coverage: 100%.**
+| DET-01 | Phase 5 | Pending |
+| DET-02 | Phase 5 | Pending |
+| DET-03 | Phase 5 | Pending |
+| DET-04 | Phase 5 | Pending |
+
+**Total: 18/18 requirements mapped. Coverage: 100%.**
