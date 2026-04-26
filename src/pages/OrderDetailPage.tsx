@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { useLanguage } from '../context/LanguageContext'
 import { getOrder, deleteOrder, updateOrder } from '../lib/api'
@@ -68,6 +68,7 @@ export function OrderDetailPage() {
   const [deleteError, setDeleteError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<'client' | 'item' | 'payment' | 'notes'>('client')
   const [sheet, setSheet] = useState<{
     field: string
@@ -101,6 +102,7 @@ export function OrderDetailPage() {
   const handleFieldSave = async (field: string, value: string) => {
     if (!order) return
     setSaving(true)
+    setSaveError(null)
     try {
       const payload: Record<string, unknown> = { id: order.id, [field]: value }
       if (field === 'price_to_client' || field === 'advance_amount') {
@@ -121,6 +123,8 @@ export function OrderDetailPage() {
       setSheet(null)
       setSaveSuccess(true)
       setTimeout(() => setSaveSuccess(false), 2000)
+    } catch {
+      setSaveError(t('save_error'))
     } finally {
       setSaving(false)
     }
@@ -222,6 +226,13 @@ export function OrderDetailPage() {
         {deleteError && (
           <div className="mx-4 mt-3 bg-red-500/10 border border-red-500/30 rounded-xl p-3">
             <p className="text-sm text-red-400">{deleteError}</p>
+          </div>
+        )}
+
+        {/* Save error banner */}
+        {saveError && (
+          <div className="mx-4 mt-3 bg-red-500/10 border border-red-500/30 rounded-xl p-3">
+            <p className="text-sm text-red-400">{saveError}</p>
           </div>
         )}
 
