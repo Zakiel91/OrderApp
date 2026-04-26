@@ -91,7 +91,6 @@ export function FieldEditSheet({
             style={{
               border: 'none',
               borderBottom: '2px solid var(--color-primary)',
-              textAlign: 'right',
             }}
           />
         </div>
