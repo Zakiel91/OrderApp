@@ -76,6 +76,15 @@ export function OrderDetailPage() {
     value: string
     type?: string
   } | null>(null)
+  const headerRef = useRef<HTMLDivElement>(null)
+  const [headerHeight, setHeaderHeight] = useState(96)
+
+  useEffect(() => {
+    if (!headerRef.current) return
+    const ro = new ResizeObserver(([entry]) => setHeaderHeight(entry.contentRect.height))
+    ro.observe(headerRef.current)
+    return () => ro.disconnect()
+  }, [])
 
   useEffect(() => {
     if (id) {
@@ -168,6 +177,7 @@ export function OrderDetailPage() {
       <div className="min-h-screen pb-24" style={{ background: 'var(--color-ios-bg)' }}>
         {/* Sticky header */}
         <div
+          ref={headerRef}
           className="bg-[var(--color-surface)] px-4 py-3"
           style={{ position: 'sticky', top: 0, zIndex: 10, borderBottom: '1px solid var(--color-separator)' }}
         >
@@ -246,7 +256,7 @@ export function OrderDetailPage() {
           className="bg-[var(--color-surface)] flex overflow-x-auto"
           style={{
             position: 'sticky',
-            top: 96,
+            top: headerHeight,
             zIndex: 9,
             borderBottom: '1px solid var(--color-separator)',
             WebkitOverflowScrolling: 'touch',
