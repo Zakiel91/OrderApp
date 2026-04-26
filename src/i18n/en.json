@@ -230,5 +230,13 @@
   "orders_load_error": "Could not load orders. Check your connection and try again.",
   "retry": "Retry",
   "edit_not_allowed": "This order can no longer be edited (status: {status}).",
-  "delete_error": "Failed to delete order. Please try again."
+  "delete_error": "Failed to delete order. Please try again.",
+  "tab_client": "Client",
+  "tab_item": "Item",
+  "tab_payment": "Payment",
+  "tab_notes": "Notes",
+  "cancel": "Cancel",
+  "save_success": "Change saved",
+  "whatsapp_action": "WhatsApp",
+  "status_change_action": "Status"
 }

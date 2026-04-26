@@ -230,5 +230,13 @@
   "orders_load_error": "לא ניתן לטעון הזמנות. בדוק את החיבור ונסה שוב.",
   "retry": "נסה שוב",
   "edit_not_allowed": "לא ניתן לערוך הזמנה זו (סטטוס: {status}).",
-  "delete_error": "מחיקת ההזמנה נכשלה. נסה שוב."
+  "delete_error": "מחיקת ההזמנה נכשלה. נסה שוב.",
+  "tab_client": "לקוח",
+  "tab_item": "פריט",
+  "tab_payment": "תשלום",
+  "tab_notes": "הערות",
+  "cancel": "ביטול",
+  "save_success": "השינוי נשמר",
+  "whatsapp_action": "WhatsApp",
+  "status_change_action": "סטטוס"
 }
