@@ -145,6 +145,8 @@ export function OrderDetailPage() {
     value: string | number | undefined | null,
     type?: string
   ) => {
+    // Defense-in-depth: FieldRow already receives editable={isEditable} and won't call onTap
+    // when not editable. This guard is a safety net in case the caller changes in the future.
     if (order?.status !== 'new') return
     setSheet({ field, label, value: value != null ? String(value) : '', type })
   }
