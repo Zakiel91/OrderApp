@@ -13,7 +13,7 @@
 - [x] **Phase 2: Mobile UX Foundation** — Scroll resets, fixed bottom nav, thumb-friendly tap targets (complete 2026-04-20)
 - [x] **Phase 3: Wizard Polish** — Step indicator, draft saved indicator, smooth step transitions (complete 2026-04-20)
 - [x] **Phase 4: Orders Features** — Edit UI for pending orders, search/filter bar, error states (complete 2026-04-21)
-- [ ] **Phase 5: Order Detail Redesign** — iPhone-native order detail page: sticky header, tabs, bottom sheet editing
+- [x] **Phase 5: Order Detail Redesign** — iPhone-native order detail page: sticky header, tabs, bottom sheet editing (complete 2026-04-26)
 
 ---
 
@@ -115,7 +115,7 @@ Plans:
 Plans:
 - [x] 05-01-PLAN.md — iOS design tokens + slideUp keyframe in index.css + 8 new i18n keys in he/en/ru (DET-04)
 - [x] 05-02-PLAN.md — Create FieldEditSheet.tsx component — bottom sheet with slideUp animation, save/cancel logic (DET-03, DET-04)
-- [ ] 05-03-PLAN.md — Rewrite OrderDetailPage.tsx — sticky header, 4 tabs, FieldEditSheet integration, PUT via updateOrder (DET-01, DET-02, DET-03, DET-04)
+- [x] 05-03-PLAN.md — Rewrite OrderDetailPage.tsx — sticky header, 4 tabs, FieldEditSheet integration, PUT via updateOrder (DET-01, DET-02, DET-03, DET-04)
 
 ---
 
@@ -128,7 +128,7 @@ Plans:
 | 2. Mobile UX Foundation | 3/3 | Done | 2026-04-20 |
 | 3. Wizard Polish | 2/2 | Done | 2026-04-20 |
 | 4. Orders Features | 2/2 | Done | 2026-04-21 |
-| 5. Order Detail Redesign | 2/3 | In Progress | — |
+| 5. Order Detail Redesign | 3/3 | Done | 2026-04-26 |
 
 ---
 
@@ -151,9 +151,9 @@ Plans:
 | FEAT-02 | Phase 4 | Complete |
 | FEAT-03 | Phase 4 | Complete |
 
-| DET-01 | Phase 5 | Pending |
-| DET-02 | Phase 5 | Pending |
-| DET-03 | Phase 5 | Pending |
-| DET-04 | Phase 5 | Pending |
+| DET-01 | Phase 5 | Complete |
+| DET-02 | Phase 5 | Complete |
+| DET-03 | Phase 5 | Complete |
+| DET-04 | Phase 5 | Complete |
 
 **Total: 18/18 requirements mapped. Coverage: 100%.**
