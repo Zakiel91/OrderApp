@@ -55,7 +55,7 @@ The app already works, but the mobile UX is rough: screens jump on navigation, b
 - ✓ Order detail + delete
 - ✓ Draft saved in localStorage
 
-### Validated (this milestone — complete 2026-04-21)
+### Validated (this milestone — complete 2026-04-26)
 - [x] **UX-01** Scroll position resets to top on step change — Validated in Phase 2
 - [x] **UX-02** Step indicator shows current position visually on every step screen — Validated in Phase 3
 - [x] **UX-03** All tap targets ≥ 48px height (thumb-friendly) — Validated in Phase 2
@@ -70,6 +70,10 @@ The app already works, but the mobile UX is rough: screens jump on navigation, b
 - [x] **FEAT-01** Order edit UI — salespeople can edit their own pending orders — Validated in Phase 4
 - [x] **FEAT-02** "My Orders" shows order count and has a search/filter bar — Validated in Phase 4
 - [x] **FEAT-03** Error message shown when orders fail to load — Validated in Phase 4
+- [x] **DET-01** Sticky header with order number, status pill, quick-action buttons — Validated in Phase 5
+- [x] **DET-02** Order detail content split into 4 tabs (Client/Item/Payment/Notes) — Validated in Phase 5
+- [x] **DET-03** Tap-to-edit bottom sheet with server persistence — Validated in Phase 5
+- [x] **DET-04** iPhone-native feel: iOS palette, SF Pro, 50px rows, slideUp animation — Validated in Phase 5
 
 ### Out of Scope
 - Hard mandatory field blocking ("next" always works) — user preference
@@ -117,4 +121,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-21 — Milestone "Mobile UX Overhaul" complete. All 14 requirements validated across Phases 0–4.*
+*Last updated: 2026-04-26 — Phase 5 complete. All 18 requirements validated across Phases 0–5.*
