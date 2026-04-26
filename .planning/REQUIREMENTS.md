@@ -36,6 +36,15 @@
 | FEAT-02 | "My Orders" shows order count and has a search/filter bar | Phase 4 | Pending |
 | FEAT-03 | Error message shown when orders fail to load (not silent empty list) | Phase 4 | Pending |
 
+### DET — Order Detail Redesign
+
+| ID | Requirement | Phase | Status |
+|----|-------------|-------|--------|
+| DET-01 | Order detail page has a sticky header showing order number, status pill, and quick-action buttons (WhatsApp, Edit, Status) | Phase 5 | Pending |
+| DET-02 | Order detail content is split into tabs (Client / Item / Payment / Notes) — not a single long scroll | Phase 5 | Pending |
+| DET-03 | Tapping any field in the detail view opens a bottom sheet; the salesperson edits and saves the field; change is persisted via API | Phase 5 | Pending |
+| DET-04 | The page feels iPhone-native: iOS system palette, SF Pro font, 50px min row height, smooth bottom sheet animation | Phase 5 | Partial (tokens + i18n done; UI components pending) |
+
 ---
 
 ## Traceability
@@ -56,8 +65,12 @@
 | FEAT-01 | Phase 4 | Pending |
 | FEAT-02 | Phase 4 | Pending |
 | FEAT-03 | Phase 4 | Pending |
+| DET-01 | Phase 5 | Pending |
+| DET-02 | Phase 5 | Pending |
+| DET-03 | Phase 5 | Pending |
+| DET-04 | Phase 5 | Pending |
 
-**Coverage: 14/14 — 100%**
+**Coverage: 18/18 — 100%**
 
 ---
 

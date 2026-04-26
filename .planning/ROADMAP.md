@@ -113,7 +113,7 @@ Plans:
 **Design**: `.claude/skills/sketch-findings-OrderApp/` (validated design decisions from sketch sessions 001, 002)
 
 Plans:
-- [ ] 05-01-PLAN.md — iOS design tokens + slideUp keyframe in index.css + 8 new i18n keys in he/en/ru (DET-04)
+- [x] 05-01-PLAN.md — iOS design tokens + slideUp keyframe in index.css + 8 new i18n keys in he/en/ru (DET-04)
 - [ ] 05-02-PLAN.md — Create FieldEditSheet.tsx component — bottom sheet with slideUp animation, save/cancel logic (DET-03, DET-04)
 - [ ] 05-03-PLAN.md — Rewrite OrderDetailPage.tsx — sticky header, 4 tabs, FieldEditSheet integration, PUT via updateOrder (DET-01, DET-02, DET-03, DET-04)
 
@@ -128,7 +128,7 @@ Plans:
 | 2. Mobile UX Foundation | 3/3 | Done | 2026-04-20 |
 | 3. Wizard Polish | 2/2 | Done | 2026-04-20 |
 | 4. Orders Features | 2/2 | Done | 2026-04-21 |
-| 5. Order Detail Redesign | 0/3 | Planning | — |
+| 5. Order Detail Redesign | 1/3 | In Progress | — |
 
 ---
 
