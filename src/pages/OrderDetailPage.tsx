@@ -195,7 +195,12 @@ export function OrderDetailPage() {
                 type="button"
                 className="flex-1 py-2 text-[13px] font-semibold transition-opacity active:opacity-75"
                 style={{ background: '#e8f8ee', color: '#248a3d', borderRadius: 10, border: 'none' }}
-                onClick={() => window.open(`https://wa.me/${order.client_phone!.replace(/\D/g, '')}`, '_blank')}
+                onClick={() => {
+                  const digits = (order.client_phone ?? '').replace(/\D/g, '')
+                  if (digits.length >= 7) {
+                    window.open(`https://wa.me/${digits}`, '_blank', 'noopener,noreferrer')
+                  }
+                }}
               >
                 {t('whatsapp_action')}
               </button>
