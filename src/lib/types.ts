@@ -59,6 +59,10 @@ export interface Order {
   pendant_extension_2?: string
   order_purpose?: string // upid or memo
   certificate?: string
+  // Payment fields
+  advance_amount?: number
+  advance_method?: string
+  special_instructions?: string
 }
 
 export interface FilterData {
