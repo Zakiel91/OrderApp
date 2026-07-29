@@ -1,12 +1,14 @@
 import { useOrderForm } from '../../context/OrderFormContext'
 import { useLanguage } from '../../context/LanguageContext'
-import { FormField, selectClass } from '../FormField'
+import { useWizardErrors } from '../../context/WizardNavContext'
+import { FormField, selectClass, fieldClass } from '../FormField'
 import { RING_SIZES, getRingSizeConversion } from '../../lib/measurements'
 import type { RingSizeSystem } from '../../lib/types'
 
 export function RingSizer() {
   const { form, updateField } = useOrderForm()
   const { t } = useLanguage()
+  const errors = useWizardErrors()
   const isEternity = form.jewelry_type === 'eternity'
 
   // IL uses same values as EU (circumference in mm)
@@ -32,6 +34,7 @@ export function RingSizer() {
             <button
               key={sys}
               type="button"
+              aria-pressed={form.size_system === sys}
               onClick={() => { updateField('size_system', sys); updateField('size', '') }}
               className={`flex-1 py-2.5 rounded-lg text-sm font-medium min-h-[44px] transition-colors ${
                 form.size_system === sys
@@ -45,9 +48,10 @@ export function RingSizer() {
         </div>
       </FormField>
 
-      <FormField label={t('ring_size')} required>
+      <FormField label={t('ring_size')} required error={errors.size}>
         <select
-          className={selectClass}
+          className={errors.size ? selectClass + ' !border-[var(--color-error)]' : selectClass}
+          aria-invalid={!!errors.size}
           value={form.size}
           onChange={e => updateField('size', e.target.value)}
         >
@@ -98,12 +102,14 @@ export function RingSizer() {
       )}
 
       <FormField label={t('finger_notes')}>
+        {/* Own field. This input used to write into form.comment — the same state
+            as the Comments textarea rendered directly below it in Step 3, so the
+            two silently overwrote each other. Merged into the comment on submit. */}
         <input
           type="text"
-          className="w-full px-4 py-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text)] text-sm min-h-[44px]"
-          placeholder=""
-          value={form.comment}
-          onChange={e => updateField('comment', e.target.value)}
+          className={fieldClass()}
+          value={form.finger_notes}
+          onChange={e => updateField('finger_notes', e.target.value)}
         />
       </FormField>
     </div>

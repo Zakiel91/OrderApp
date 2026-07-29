@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLanguage } from '../context/LanguageContext'
+import { EMAIL_RE } from '../lib/validation'
 
 interface FieldEditSheetProps {
   field: string        // DB column name, e.g. 'client_name_raw'
@@ -24,13 +25,28 @@ export function FieldEditSheet({
   const [localValue, setLocalValue] = useState(value)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Auto-focus after slide-up animation completes (300ms delay)
+  // Auto-focus after slide-up animation completes (300ms delay), and let Escape
+  // dismiss the sheet like the backdrop tap does.
   useEffect(() => {
     const timer = setTimeout(() => inputRef.current?.focus(), 300)
-    return () => clearTimeout(timer)
-  }, [])
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [onClose])
+
+  // Same checks the wizard applies, so a single-field edit can't write a value
+  // the create flow would have rejected.
+  const trimmed = localValue.trim()
+  const invalid =
+    (field === 'client_name_raw' && trimmed === '') ||
+    (type === 'email' && trimmed !== '' && !EMAIL_RE.test(trimmed)) ||
+    (type === 'number' && trimmed !== '' && !(parseFloat(trimmed) >= 0))
 
   async function handleSave() {
+    if (invalid) return
     await onSave(field, localValue)
   }
 
@@ -43,6 +59,9 @@ export function FieldEditSheet({
     >
       {/* Sheet — stopPropagation so clicks inside don't close */}
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={label}
         className="w-full bg-[var(--color-surface)] pb-10"
         style={{
           borderRadius: '20px 20px 0 0',
@@ -73,7 +92,7 @@ export function FieldEditSheet({
           <button
             type="button"
             className="text-[var(--color-primary)] text-[17px] font-semibold bg-transparent border-none cursor-pointer disabled:opacity-40 font-[var(--font-body)]"
-            disabled={saving}
+            disabled={saving || invalid}
             onClick={handleSave}
           >
             {saving ? '…' : t('save_changes')}
@@ -85,14 +104,22 @@ export function FieldEditSheet({
           <input
             ref={inputRef}
             type={type || 'text'}
+            {...(type === 'number' ? { min: 0, step: 0.01 } : {})}
             value={localValue}
             onChange={e => setLocalValue(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter' && !invalid && !saving) handleSave() }}
+            aria-invalid={invalid}
             className="w-full text-[17px] bg-transparent outline-none pb-2 text-[var(--color-text)]"
             style={{
               border: 'none',
-              borderBottom: '2px solid var(--color-primary)',
+              borderBottom: `2px solid ${invalid ? 'var(--color-error)' : 'var(--color-primary)'}`,
             }}
           />
+          {invalid && (
+            <p role="alert" className="mt-2 text-[13px] text-[var(--color-error)]">
+              {t(type === 'email' ? 'err_email' : type === 'number' ? 'err_positive' : 'err_required')}
+            </p>
+          )}
         </div>
       </div>
     </div>

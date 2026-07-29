@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect, useMemo, type ReactNode } from 'react'
 import type { Language } from '../lib/types'
 import { getTranslations, isRTL } from '../i18n'
 
@@ -11,14 +11,21 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | null>(null)
 
+const SUPPORTED: Language[] = ['en', 'he', 'ru']
+
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Language>(() => {
-    return (localStorage.getItem('lang') as Language) || 'en'
+    try {
+      const saved = localStorage.getItem('lang') as Language | null
+      return saved && SUPPORTED.includes(saved) ? saved : 'en'
+    } catch {
+      return 'en'
+    }
   })
 
   const setLang = useCallback((l: Language) => {
     setLangState(l)
-    localStorage.setItem('lang', l)
+    try { localStorage.setItem('lang', l) } catch { /* private mode */ }
   }, [])
 
   const rtl = isRTL(lang)
@@ -28,19 +35,25 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     document.documentElement.lang = lang
   }, [lang, rtl])
 
+  // Resolved once per language instead of on every single t() call.
+  const translations = useMemo(() => getTranslations(lang), [lang])
+
   const t = useCallback((key: string, vars?: Record<string, string>) => {
-    const translations = getTranslations(lang)
     let text = translations[key] || key
     if (vars) {
-      Object.entries(vars).forEach(([k, v]) => {
-        text = text.replace(`{${k}}`, v)
-      })
+      for (const [k, v] of Object.entries(vars)) {
+        // split/join replaces every occurrence — String.replace(string, …) only
+        // replaces the first.
+        text = text.split(`{${k}}`).join(v)
+      }
     }
     return text
-  }, [lang])
+  }, [translations])
+
+  const value = useMemo(() => ({ lang, setLang, t, rtl }), [lang, setLang, t, rtl])
 
   return (
-    <LanguageContext.Provider value={{ lang, setLang, t, rtl }}>
+    <LanguageContext.Provider value={value}>
       {children}
     </LanguageContext.Provider>
   )

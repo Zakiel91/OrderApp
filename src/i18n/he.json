@@ -238,5 +238,40 @@
   "cancel": "ביטול",
   "save_success": "השינוי נשמר",
   "whatsapp_action": "WhatsApp",
-  "status_change_action": "סטטוס"
+  "status_change_action": "סטטוס",
+
+  "clear": "נקה",
+  "client_found_in_db": "הלקוח נמצא במערכת",
+  "multiple_clients_found": "נמצאו כמה לקוחות — בחר אחד:",
+  "company_number": "ח\"פ",
+  "id_type": "סוג מזהה",
+  "id_type_person": "אדם",
+  "id_type_company": "חברה",
+  "id_9_digits": "תעודת זהות — 9 ספרות",
+  "company_9_digits": "ח\"פ — 9 ספרות",
+  "not_specified": "לא צוין",
+  "load_more": "טען עוד",
+  "images_limit": "עד {max} תמונות להזמנה",
+  "images_upload_failed": "ההזמנה נשמרה, אך העלאת התמונות נכשלה. פתח את ההזמנה וצרף אותן מחדש.",
+
+  "err_required": "שדה חובה",
+  "err_required_fields": "נא למלא את שדות החובה",
+  "err_email": "נא להזין כתובת אימייל תקינה",
+  "err_positive": "נא להזין מספר 0 ומעלה",
+  "err_pick_one": "נא לבחור אפשרות אחת לפחות",
+  "err_network": "אין חיבור לשרת. בדוק את האינטרנט ונסה שוב.",
+
+  "status_new": "חדש",
+  "status_received": "התקבל",
+  "status_in_production": "בייצור",
+  "status_completed": "הושלם",
+  "status_delivered": "נמסר",
+  "status_cancelled": "בוטל",
+  "status_on_hold": "בהמתנה",
+  "status_paid": "שולם",
+  "status_sold": "נמכר",
+  "status_in_stock": "במלאי",
+
+  "role_admin": "מנהל",
+  "role_salesman": "איש מכירות"
 }

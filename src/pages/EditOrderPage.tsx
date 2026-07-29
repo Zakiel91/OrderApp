@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { useLanguage } from '../context/LanguageContext'
-import { getOrder, updateOrder } from '../lib/api'
-import { FormField, inputClass, selectClass, buttonClass, secondaryButtonClass } from '../components/FormField'
+import { getOrder, updateOrder, ApiError } from '../lib/api'
+import { formatStatus } from '../lib/constants'
+import { EMAIL_RE } from '../lib/validation'
+import { FormField, inputClass, fieldClass, selectClass, buttonClass, secondaryButtonClass } from '../components/FormField'
 import type { Order } from '../lib/types'
 
 const JEWELRY_TYPE_KEYS = ['ring', 'earrings', 'pendant', 'necklace', 'bracelet', 'eternity', 'other'] as const
@@ -19,11 +21,14 @@ export function EditOrderPage() {
   const [formData, setFormData] = useState<Record<string, string>>({})
 
   useEffect(() => {
-    if (id) {
-      getOrder(parseInt(id))
+    if (!id) { setLoading(false); setError(t('error')); return }
+    let cancelled = false
+    getOrder(parseInt(id))
         .then(o => {
+          if (cancelled) return
           if (o.status !== 'new') {
-            setError(t('edit_not_allowed'))
+            // The message carries a {status} placeholder — it used to render literally.
+            setError(t('edit_not_allowed', { status: formatStatus(o.status, t) }))
           } else {
             setOrder(o)
             setFormData({
@@ -41,13 +46,25 @@ export function EditOrderPage() {
             })
           }
         })
-        .catch(e => setError(e.message))
-        .finally(() => setLoading(false))
-    }
-  }, [id])
+        .catch(e => {
+          if (cancelled) return
+          if (e instanceof ApiError && e.status === 0) setError(t('err_network'))
+          else setError(e instanceof Error ? e.message : t('error'))
+        })
+        .finally(() => { if (!cancelled) setLoading(false) })
+    return () => { cancelled = true }
+  }, [id, t])
+
+  const emailInvalid = !!formData.client_email?.trim() && !EMAIL_RE.test(formData.client_email.trim())
+  const nameMissing = !formData.client_name_raw?.trim()
 
   const handleSave = async () => {
     if (!order) return
+    // Same rules as the create wizard — the edit screen had none at all.
+    if (nameMissing || emailInvalid) {
+      setSaveError(t(nameMissing ? 'err_required_fields' : 'err_email'))
+      return
+    }
     setSaving(true)
     setSaveError(null)
     try {
@@ -58,7 +75,8 @@ export function EditOrderPage() {
       })
       navigate(`/orders/${id}`)
     } catch (e: unknown) {
-      setSaveError(e instanceof Error ? e.message : t('save_error'))
+      if (e instanceof ApiError && e.status === 0) setSaveError(t('err_network'))
+      else setSaveError(e instanceof Error ? e.message : t('save_error'))
     } finally {
       setSaving(false)
     }
@@ -109,14 +127,16 @@ export function EditOrderPage() {
       {/* Edit form card */}
       <div className="bg-[var(--color-surface)] rounded-xl p-4 mb-4">
         <div className="space-y-4">
-          <FormField label={t('client_name')}>
-            <input className={inputClass} type="text" value={formData.client_name_raw} onChange={set('client_name_raw')} />
+          <FormField label={t('client_name')} required error={nameMissing ? 'err_required' : undefined}>
+            <input className={fieldClass(nameMissing)} type="text" aria-invalid={nameMissing}
+              value={formData.client_name_raw} onChange={set('client_name_raw')} />
           </FormField>
           <FormField label={t('client_phone')}>
-            <input className={inputClass} type="tel" value={formData.client_phone} onChange={set('client_phone')} />
+            <input className={inputClass} type="tel" inputMode="tel" value={formData.client_phone} onChange={set('client_phone')} />
           </FormField>
-          <FormField label={t('client_email')}>
-            <input className={inputClass} type="email" value={formData.client_email} onChange={set('client_email')} />
+          <FormField label={t('client_email')} error={emailInvalid ? 'err_email' : undefined}>
+            <input className={fieldClass(emailInvalid)} type="email" inputMode="email" aria-invalid={emailInvalid}
+              value={formData.client_email} onChange={set('client_email')} />
           </FormField>
           <FormField label={t('jewelry_type')}>
             <select className={selectClass} value={formData.jewelry_type} onChange={set('jewelry_type')}>
@@ -139,7 +159,7 @@ export function EditOrderPage() {
             <input className={inputClass} type="text" value={formData.main_stone_parcel} onChange={set('main_stone_parcel')} />
           </FormField>
           <FormField label={t('price_to_client')}>
-            <input className={inputClass} type="number" value={formData.price_to_client} onChange={set('price_to_client')} />
+            <input className={inputClass} type="number" min="0" step="0.01" value={formData.price_to_client} onChange={set('price_to_client')} />
           </FormField>
           <FormField label={t('deadline')}>
             <input className={inputClass} type="date" value={formData.deadline} onChange={set('deadline')} />

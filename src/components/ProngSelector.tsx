@@ -21,10 +21,14 @@ export function ProngSelector({ value, onChange }: Props) {
       {/* Interactive diamond with 4 prong positions */}
       <div className="relative w-full max-w-[280px] mx-auto aspect-square">
         {/* Diamond SVG in center */}
+        {/* Decorative: the SVG hit areas are mouse-only, so they are hidden from
+            assistive tech. Every option is also a real button (labels above and
+            the grid below), which is what keyboard and screen readers use. */}
         <svg
           viewBox="0 0 200 200"
           className="w-full h-full"
           fill="none"
+          aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
         >
           {/* Diamond facets - brilliant cut top view */}
@@ -97,6 +101,7 @@ export function ProngSelector({ value, onChange }: Props) {
             <button
               key={prong.key}
               type="button"
+              aria-pressed={isSelected}
               onClick={() => onChange(prong.key)}
               className={`absolute ${posClasses} px-2 py-1 rounded-lg text-xs font-medium transition-all ${
                 isSelected
@@ -116,6 +121,7 @@ export function ProngSelector({ value, onChange }: Props) {
           <button
             key={prong.key}
             type="button"
+            aria-pressed={value === prong.key}
             onClick={() => onChange(prong.key)}
             className={`py-2.5 rounded-xl text-xs font-semibold min-h-[44px] transition-all tracking-wide ${
               value === prong.key

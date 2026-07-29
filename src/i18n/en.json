@@ -238,5 +238,40 @@
   "cancel": "Cancel",
   "save_success": "Change saved",
   "whatsapp_action": "WhatsApp",
-  "status_change_action": "Status"
+  "status_change_action": "Status",
+
+  "clear": "Clear",
+  "client_found_in_db": "Client found in database",
+  "multiple_clients_found": "Multiple clients found — select one:",
+  "company_number": "Company Number",
+  "id_type": "Identifier type",
+  "id_type_person": "Person",
+  "id_type_company": "Company",
+  "id_9_digits": "9 digit ID number",
+  "company_9_digits": "9 digit company number",
+  "not_specified": "Not specified",
+  "load_more": "Load more",
+  "images_limit": "Up to {max} pictures per order",
+  "images_upload_failed": "The order was saved, but the pictures could not be uploaded. Open the order to attach them again.",
+
+  "err_required": "This field is required",
+  "err_required_fields": "Please fill in the required fields",
+  "err_email": "Enter a valid email address",
+  "err_positive": "Enter a number of 0 or more",
+  "err_pick_one": "Select at least one option",
+  "err_network": "No connection to the server. Check your internet and try again.",
+
+  "status_new": "New",
+  "status_received": "Received",
+  "status_in_production": "In production",
+  "status_completed": "Completed",
+  "status_delivered": "Delivered",
+  "status_cancelled": "Cancelled",
+  "status_on_hold": "On hold",
+  "status_paid": "Paid",
+  "status_sold": "Sold",
+  "status_in_stock": "In stock",
+
+  "role_admin": "Admin",
+  "role_salesman": "Salesperson"
 }

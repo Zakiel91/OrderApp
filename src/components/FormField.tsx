@@ -5,10 +5,12 @@ interface Props {
   label: string
   sublabel?: string
   required?: boolean
+  /** i18n key of a validation message; renders below the field and marks it invalid. */
+  error?: string
   children: ReactNode
 }
 
-export function FormField({ label, sublabel, required, children }: Props) {
+export function FormField({ label, sublabel, required, error, children }: Props) {
   const { t } = useLanguage()
   return (
     <div className="mb-5">
@@ -19,11 +21,23 @@ export function FormField({ label, sublabel, required, children }: Props) {
         {!required && <span className="text-[var(--color-text-muted)] text-xs ms-1 opacity-50">({t('optional')})</span>}
       </label>
       {children}
+      {error && (
+        <p role="alert" className="mt-1.5 text-[13px] text-[var(--color-error)]">
+          {t(error)}
+        </p>
+      )}
     </div>
   )
 }
 
 export const inputClass = 'w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl px-4 py-3.5 text-[17px] text-[var(--color-text)] placeholder-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 min-h-[50px] transition-all shadow-sm'
+
+/** Same as inputClass but with the error border — apply when a field is invalid. */
+export const inputErrorClass = inputClass + ' !border-[var(--color-error)]'
+
+export function fieldClass(hasError?: boolean): string {
+  return hasError ? inputErrorClass : inputClass
+}
 
 export const selectClass = inputClass + ' appearance-none'
 

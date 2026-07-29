@@ -103,7 +103,9 @@ export interface OrderFormData {
   // Step 3
   jewelry_type: JewelryType | ''
   collection_style: string
+  other_type: string // free text when jewelry_type === 'other' — sent as `description`
   comment: string // was "description" - renamed to Comments
+  finger_notes: string // ring-specific note; appended to `comment` on submit
   metal: string
   size: string
   size_system: RingSizeSystem
@@ -229,7 +231,9 @@ export const INITIAL_FORM_DATA: OrderFormData = {
   salesman_name: '',
   jewelry_type: '',
   collection_style: '',
+  other_type: '',
   comment: '',
+  finger_notes: '',
   metal: '14K WHITE',
   size: '',
   size_system: 'us',

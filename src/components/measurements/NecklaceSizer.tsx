@@ -1,11 +1,13 @@
 import { useOrderForm } from '../../context/OrderFormContext'
 import { useLanguage } from '../../context/LanguageContext'
+import { useWizardErrors } from '../../context/WizardNavContext'
 import { FormField, inputClass, selectClass } from '../FormField'
 import { NECKLACE_PRESETS, PENDANT_SIZES, PENDANT_EXT1_SIZES, PENDANT_EXT2_SIZES, NECKLACE_EXTENSIONS, cmToInches } from '../../lib/measurements'
 
 export function NecklaceSizer() {
   const { form, updateField } = useOrderForm()
   const { t } = useLanguage()
+  const errors = useWizardErrors()
   const isPendant = form.jewelry_type === 'pendant'
 
   const addStation = () => {
@@ -55,9 +57,10 @@ export function NecklaceSizer() {
         </FormField>
 
         {/* Main chain length 36-45 */}
-        <FormField label={t('pendant_chain_length')} required>
+        <FormField label={t('pendant_chain_length')} required error={errors.pendant_length_cm}>
           <select
-            className={selectClass}
+            className={errors.pendant_length_cm ? selectClass + ' !border-[var(--color-error)]' : selectClass}
+            aria-invalid={!!errors.pendant_length_cm}
             value={form.pendant_length_cm}
             onChange={e => updateField('pendant_length_cm', e.target.value)}
           >

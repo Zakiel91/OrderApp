@@ -1,12 +1,13 @@
-import { useState } from 'react'
 import { useOrderForm } from '../context/OrderFormContext'
 import { useLanguage } from '../context/LanguageContext'
-import { FormField, inputClass } from '../components/FormField'
+import { useWizardErrors } from '../context/WizardNavContext'
+import { FormField, fieldClass } from '../components/FormField'
 import { JEWELRY_TYPES, METALS_SORTED, COLLECTIONS_BY_TYPE, JEWELRY_ICONS } from '../lib/constants'
 import { MetalWheelPicker } from '../components/MetalWheelPicker'
 import { RingSizer } from '../components/measurements/RingSizer'
 import { NecklaceSizer } from '../components/measurements/NecklaceSizer'
 import { BraceletSizer } from '../components/measurements/BraceletSizer'
+import { EarringSizer } from '../components/measurements/EarringSizer'
 import type { JewelryType } from '../lib/types'
 
 function formatCollection(c: string) {
@@ -23,7 +24,10 @@ function StyleChips({ items, value, onChange }: { items: string[]; value: string
           <button
             key={item}
             type="button"
-            onClick={() => onChange(item)}
+            aria-pressed={active}
+            // Tapping the active chip clears it — the field is optional and there
+            // was previously no way to undo a selection.
+            onClick={() => onChange(active ? '' : item)}
             className="px-3 py-1.5 rounded-full text-[13px] font-medium transition-all"
             style={{
               background: active ? 'var(--color-primary)' : 'var(--color-surface)',
@@ -40,9 +44,9 @@ function StyleChips({ items, value, onChange }: { items: string[]; value: string
 }
 
 export function Step3Product() {
-  const { form, updateField } = useOrderForm()
+  const { form, updateField, updateFields } = useOrderForm()
   const { t } = useLanguage()
-  const [otherType, setOtherType] = useState('')
+  const errors = useWizardErrors()
 
   const collections = form.jewelry_type ? (COLLECTIONS_BY_TYPE[form.jewelry_type] || []) : []
 
@@ -56,39 +60,56 @@ export function Step3Product() {
         return <NecklaceSizer />
       case 'bracelet':
         return <BraceletSizer />
+      // EarringSizer existed but was never referenced, so picking "Earrings"
+      // rendered an empty "Size" card and the earring_* columns stayed blank.
+      case 'earrings':
+        return <EarringSizer />
       default:
         return null
     }
   }
 
+  const measurements = renderMeasurements()
+
   return (
     <div className="p-4 space-y-1">
       <h2 className="text-lg font-semibold mb-4">{t('step3_title')}</h2>
 
-      <FormField label={t('jewelry_type')} required>
+      <FormField label={t('jewelry_type')} required error={errors.jewelry_type}>
         <div className="grid grid-cols-3 gap-2">
-          {JEWELRY_TYPES.map(jt => (
-            <button
-              key={jt.key}
-              type="button"
-              onClick={() => {
-                updateField('jewelry_type', jt.key as JewelryType)
-                updateField('collection_style', '')
-                if (jt.key !== 'other') setOtherType('')
-              }}
-              className={`flex flex-col items-center justify-center p-3 rounded-xl min-h-[72px] transition-all ${
-                (jt.key === 'ring' ? (form.jewelry_type === 'ring' || form.jewelry_type === 'eternity') : form.jewelry_type === jt.key)
-                  ? 'bg-[var(--color-primary)] text-white scale-[1.02] shadow-lg'
-                  : 'bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-border)]'
-              }`}
-            >
-              <span
-                className="w-7 h-7 mb-1"
-                dangerouslySetInnerHTML={{ __html: JEWELRY_ICONS[jt.icon] || '' }}
-              />
-              <span className="text-xs font-medium">{t(jt.key)}</span>
-            </button>
-          ))}
+          {JEWELRY_TYPES.map(jt => {
+            const active = jt.key === 'ring'
+              ? (form.jewelry_type === 'ring' || form.jewelry_type === 'eternity')
+              : form.jewelry_type === jt.key
+            return (
+              <button
+                key={jt.key}
+                type="button"
+                aria-pressed={active}
+                onClick={() => {
+                  updateFields({
+                    jewelry_type: jt.key as JewelryType,
+                    collection_style: '',
+                    // Drop the free-text description when leaving "other".
+                    ...(jt.key === 'other' ? {} : { other_type: '' }),
+                  })
+                }}
+                className={`flex flex-col items-center justify-center p-3 rounded-xl min-h-[72px] transition-all ${
+                  active
+                    ? 'bg-[var(--color-primary)] text-white scale-[1.02] shadow-lg'
+                    : 'bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-border)]'
+                }`}
+              >
+                {/* Icons come from the local JEWELRY_ICONS constant — no user input. */}
+                <span
+                  className="w-7 h-7 mb-1"
+                  aria-hidden="true"
+                  dangerouslySetInnerHTML={{ __html: JEWELRY_ICONS[jt.icon] || '' }}
+                />
+                <span className="text-xs font-medium">{t(jt.key)}</span>
+              </button>
+            )
+          })}
         </div>
       </FormField>
 
@@ -109,10 +130,13 @@ export function Step3Product() {
                 <button
                   key={opt.label}
                   type="button"
+                  aria-pressed={active}
                   onClick={() => {
-                    updateField('jewelry_type', opt.jt)
-                    updateField('eternity_type', opt.et)
-                    updateField('collection_style', '')
+                    updateFields({
+                      jewelry_type: opt.jt,
+                      eternity_type: opt.et,
+                      collection_style: '',
+                    })
                   }}
                   className={`px-3 py-2 rounded-lg text-sm font-medium min-h-[44px] transition-colors ${
                     active
@@ -129,15 +153,15 @@ export function Step3Product() {
       )}
 
       {form.jewelry_type === 'other' && (
-        <FormField label={t('other_type_describe')} required>
+        // Bound to its own field. It used to write into form.comment, which is
+        // also the Comments textarea below — each overwrote the other.
+        <FormField label={t('other_type_describe')} required error={errors.other_type}>
           <input
             type="text"
-            className={inputClass}
-            value={otherType}
-            onChange={e => {
-              setOtherType(e.target.value)
-              updateField('comment', e.target.value)
-            }}
+            className={fieldClass(!!errors.other_type)}
+            value={form.other_type}
+            aria-invalid={!!errors.other_type}
+            onChange={e => updateField('other_type', e.target.value)}
             placeholder={t('other_type_placeholder')}
           />
         </FormField>
@@ -145,33 +169,37 @@ export function Step3Product() {
 
       {/* Style — horizontal chip scroll, distinct from metal wheel */}
       {collections.length > 0 && (
-        <FormField label="Style">
+        <FormField label={t('collection')}>
+          {/* No `|| collections[0]` fallback: that made the first chip look
+              selected while collection_style was still empty in the payload. */}
           <StyleChips
             items={collections}
-            value={form.collection_style || collections[0]}
+            value={form.collection_style}
             onChange={val => updateField('collection_style', val)}
           />
         </FormField>
       )}
 
-      <FormField label={t('metal')} required>
+      <FormField label={t('metal')} required error={errors.metal}>
         <MetalWheelPicker
-          value={form.metal || '14K WHITE'}
+          value={form.metal}
           onChange={val => updateField('metal', val)}
           metals={METALS_SORTED}
         />
       </FormField>
 
-      {form.jewelry_type && form.jewelry_type !== 'other' && (
+      {/* Only render the card when there is actually something in it — an
+          unsupported type used to produce an empty bordered "Size" box. */}
+      {measurements && (
         <div className="border border-[var(--color-border)] rounded-xl p-4 bg-[var(--color-surface)]">
           <h3 className="text-sm font-medium text-[var(--color-text-muted)] mb-3">{t('size')}</h3>
-          {renderMeasurements()}
+          {measurements}
         </div>
       )}
 
       <FormField label={t('comments')}>
         <textarea
-          className={inputClass + ' min-h-[80px] resize-none'}
+          className={fieldClass() + ' min-h-[80px] resize-none'}
           value={form.comment}
           onChange={e => updateField('comment', e.target.value)}
           rows={3}

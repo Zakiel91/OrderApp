@@ -47,15 +47,23 @@ export function PhoneInput({ countryCode, phone, onCountryChange, onPhoneChange,
 
   const selected = COUNTRY_CODES.find(c => c.code === countryCode) ?? COUNTRY_CODES[0]
 
-  // Close dropdown on outside click
+  // Close dropdown on outside click or Escape
   useEffect(() => {
-    function handle(e: MouseEvent) {
+    if (!open) return
+    function handleClick(e: MouseEvent) {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
         setOpen(false)
       }
     }
-    if (open) document.addEventListener('mousedown', handle)
-    return () => document.removeEventListener('mousedown', handle)
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    document.addEventListener('keydown', handleKey)
+    return () => {
+      document.removeEventListener('mousedown', handleClick)
+      document.removeEventListener('keydown', handleKey)
+    }
   }, [open])
 
   return (
@@ -73,6 +81,8 @@ export function PhoneInput({ countryCode, phone, onCountryChange, onPhoneChange,
         <button
           type="button"
           onClick={() => setOpen(v => !v)}
+          aria-expanded={open}
+          aria-label={`${selected.name} ${selected.code}`}
           className="flex items-center gap-1.5 px-3 py-3 text-sm font-medium flex-shrink-0 select-none"
           style={{
             borderRight: '1.5px solid var(--color-border)',
@@ -100,7 +110,12 @@ export function PhoneInput({ countryCode, phone, onCountryChange, onPhoneChange,
           onChange={e => onPhoneChange(e.target.value)}
           onBlur={onPhoneBlur}
           placeholder={placeholder || '50 123 4567'}
-          inputMode="numeric"
+          // "tel" gives the phone keypad including + and separators; "numeric"
+          // hid them.
+          inputMode="tel"
+          autoComplete="tel-national"
+          // Phone numbers are always LTR, even when the UI is Hebrew.
+          dir="ltr"
         />
       </div>
 
