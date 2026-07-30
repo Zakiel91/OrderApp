@@ -238,5 +238,40 @@
   "cancel": "Отмена",
   "save_success": "Изменение сохранено",
   "whatsapp_action": "WhatsApp",
-  "status_change_action": "Статус"
+  "status_change_action": "Статус",
+
+  "clear": "Очистить",
+  "client_found_in_db": "Клиент найден в базе",
+  "multiple_clients_found": "Найдено несколько клиентов — выберите одного:",
+  "company_number": "Номер компании",
+  "id_type": "Тип идентификатора",
+  "id_type_person": "Физлицо",
+  "id_type_company": "Компания",
+  "id_9_digits": "Удостоверение — 9 цифр",
+  "company_9_digits": "Номер компании — 9 цифр",
+  "not_specified": "Не указано",
+  "load_more": "Загрузить ещё",
+  "images_limit": "До {max} фотографий на заказ",
+  "images_upload_failed": "Заказ сохранён, но фотографии загрузить не удалось. Откройте заказ и прикрепите их снова.",
+
+  "err_required": "Обязательное поле",
+  "err_required_fields": "Заполните обязательные поля",
+  "err_email": "Введите корректный адрес эл. почты",
+  "err_positive": "Введите число не меньше 0",
+  "err_pick_one": "Выберите хотя бы один вариант",
+  "err_network": "Нет связи с сервером. Проверьте интернет и попробуйте снова.",
+
+  "status_new": "Новый",
+  "status_received": "Принят",
+  "status_in_production": "В производстве",
+  "status_completed": "Завершён",
+  "status_delivered": "Выдан",
+  "status_cancelled": "Отменён",
+  "status_on_hold": "Приостановлен",
+  "status_paid": "Оплачен",
+  "status_sold": "Продан",
+  "status_in_stock": "На складе",
+
+  "role_admin": "Администратор",
+  "role_salesman": "Менеджер по продажам"
 }

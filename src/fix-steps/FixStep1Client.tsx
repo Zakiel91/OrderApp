@@ -2,22 +2,19 @@ import { useEffect, useCallback } from 'react'
 import { useFixForm } from '../context/FixFormContext'
 import { useLanguage } from '../context/LanguageContext'
 import { useAuth } from '../context/AuthContext'
-import { FormField, inputClass, selectClass } from '../components/FormField'
+import { useWizardErrors } from '../context/WizardNavContext'
+import { FormField, fieldClass, selectClass } from '../components/FormField'
 import { PhoneInput } from '../components/PhoneInput'
+import { LookupStatusIcon } from '../components/LookupStatusIcon'
 import { useClientLookup } from '../hooks/useClientLookup'
-import type { ClientRecord } from '../lib/api'
-
-const COUNTRIES = [
-  'Israel', 'United States', 'United Kingdom', 'Belgium', 'Germany',
-  'France', 'Italy', 'Switzerland', 'Netherlands', 'India',
-  'China', 'Hong Kong', 'Japan', 'UAE', 'Thailand',
-  'Australia', 'Canada', 'Russia', 'Turkey', 'South Africa',
-]
+import { clientDisplayName, type ClientRecord } from '../lib/api'
+import { COUNTRIES } from '../lib/constants'
 
 export function FixStep1Client() {
   const { form, updateField, updateFields } = useFixForm()
   const { t } = useLanguage()
   const { user } = useAuth()
+  const errors = useWizardErrors()
 
   useEffect(() => {
     if (user) updateField('salesman_name', user.name)
@@ -25,8 +22,8 @@ export function FixStep1Client() {
 
   const applyClient = useCallback((client: ClientRecord) => {
     updateFields({
-      client_db_id:          (client as any).id || 0,
-      client_name:           (client as any).name || client.client_name || '',
+      client_db_id:          client.id || 0,
+      client_name:           clientDisplayName(client),
       client_id:             client.client_id || '',
       client_company_number: client.company_number || '',
       client_phone:          client.client_phone || '',
@@ -37,17 +34,10 @@ export function FixStep1Client() {
   }, [updateFields])
 
   const {
-    lookupStatus, nameSuggestions, showSuggestions, nameSearching, clientSelected, phoneMatches,
+    statusFor, nameSuggestions, showSuggestions, nameSearching, clientSelected, phoneMatches,
     setShowSuggestions, lookupByField, doNameSearch, handleNameChange, selectSuggestion,
     selectPhoneMatch, clearClient,
   } = useClientLookup(applyClient)
-
-  const StatusIcon = ({ side = 'right-3' }: { side?: string }) => {
-    if (lookupStatus === 'searching') return <span className={`absolute ${side} top-1/2 -translate-y-1/2 text-[13px] text-[var(--color-text-muted)] animate-pulse`}>🔍</span>
-    if (lookupStatus === 'found') return <span className={`absolute ${side} top-1/2 -translate-y-1/2 text-[13px] text-[var(--color-success)]`}>✓</span>
-    if (lookupStatus === 'not_found') return <span className={`absolute ${side} top-1/2 -translate-y-1/2 text-[13px] text-[var(--color-error)]`}>✗</span>
-    return null
-  }
 
   return (
     <div className="p-4 space-y-1">
@@ -55,7 +45,7 @@ export function FixStep1Client() {
 
       <div className="bg-[var(--color-accent)]/10 rounded-lg px-3 py-2 mb-4 border-l-2 border-[var(--color-accent)]">
         <p className="text-[12px] text-[var(--color-text-muted)] leading-relaxed">
-          ℹ️ {t('client_lookup_hint')}
+          <span aria-hidden="true">ℹ️ </span>{t('client_lookup_hint')}
         </p>
       </div>
 
@@ -63,17 +53,17 @@ export function FixStep1Client() {
       {clientSelected && (
         <div className="flex items-center justify-between px-3 py-2 rounded-lg mb-3"
           style={{ background: 'var(--color-success)15', border: '1px solid var(--color-success)40' }}>
-          <span className="text-[13px] text-[var(--color-success)] font-medium">✓ Client found in database</span>
+          <span className="text-[13px] text-[var(--color-success)] font-medium">✓ {t('client_found_in_db')}</span>
           <button
             type="button"
             onClick={() => clearClient(() => updateFields({
               client_db_id: 0, client_name: '', client_id: '', client_company_number: '',
               client_phone: '', client_email: '', client_address: '', client_country: '',
             }))}
-            className="text-xs px-2 py-1 rounded-md"
+            className="text-xs px-2 min-h-[48px] flex items-center rounded-md"
             style={{ color: 'var(--color-text-muted)', border: '1px solid var(--color-border)' }}
           >
-            Clear
+            {t('clear')}
           </button>
         </div>
       )}
@@ -87,7 +77,7 @@ export function FixStep1Client() {
             onCountryChange={code => updateField('client_country_code', code)}
             onPhoneChange={phone => { updateField('client_phone', phone); lookupByField('phone', phone) }}
           />
-          <StatusIcon side="right-12" />
+          <LookupStatusIcon status={statusFor('phone')} offsetClass="right-12" />
         </div>
       </FormField>
 
@@ -95,16 +85,16 @@ export function FixStep1Client() {
       {phoneMatches.length > 1 && (
         <div className="mb-3 rounded-xl overflow-hidden" style={{ border: '1px solid var(--color-border)' }}>
           <p className="px-3 py-2 text-[12px] text-[var(--color-text-muted)]" style={{ background: 'var(--color-surface)' }}>
-            Multiple clients found — select one:
+            {t('multiple_clients_found')}
           </p>
           {phoneMatches.map((c, i) => (
-            <button key={i} type="button"
+            <button key={c.id ?? i} type="button"
               onMouseDown={() => selectPhoneMatch(c)}
               className="w-full px-3 py-2.5 text-left text-sm flex justify-between items-center"
               style={{ borderTop: '1px solid var(--color-border)', background: 'transparent', color: 'var(--color-text)' }}>
-              <span className="font-medium">{(c as any).client_name}</span>
+              <span className="font-medium">{clientDisplayName(c)}</span>
               <span className="text-xs text-[var(--color-text-muted)]">
-                {(c as any).company_name ? `🏢 ${(c as any).company_name}` : (c as any).client_phone || ''}
+                {c.company_name ? `🏢 ${c.company_name}` : c.client_phone || ''}
               </span>
             </button>
           ))}
@@ -112,11 +102,11 @@ export function FixStep1Client() {
       )}
 
       {/* Name with autocomplete */}
-      <FormField label={t('client_name')} required>
+      <FormField label={t('client_name')} required error={errors.client_name}>
         <div className="relative">
           <input
             type="text"
-            className={inputClass}
+            className={fieldClass(!!errors.client_name)}
             style={{ paddingRight: '2.5rem' }}
             value={form.client_name}
             onChange={e => handleNameChange(e.target.value, v => updateField('client_name', v))}
@@ -124,17 +114,19 @@ export function FixStep1Client() {
             onFocus={() => nameSuggestions.length > 0 && setShowSuggestions(true)}
             placeholder={t('client_name_placeholder')}
             autoComplete="off"
+            aria-invalid={!!errors.client_name}
           />
           <button
             type="button"
+            aria-label={t('search_clients')}
             onMouseDown={e => { e.preventDefault(); doNameSearch(form.client_name) }}
-            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md"
+            className="absolute right-2 top-1/2 -translate-y-1/2 min-h-[48px] min-w-[48px] flex items-center justify-center rounded-md"
             style={{ color: 'var(--color-text-muted)', opacity: form.client_name ? 1 : 0.3 }}
           >
             {nameSearching ? (
-              <span className="text-sm animate-pulse">⏳</span>
+              <span className="text-sm animate-pulse" aria-hidden="true">⏳</span>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
               </svg>
             )}
@@ -143,12 +135,16 @@ export function FixStep1Client() {
             <ul className="absolute z-50 left-0 right-0 top-full mt-1 rounded-xl overflow-hidden shadow-lg"
               style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
               {nameSuggestions.map((c, i) => (
-                <li key={i}
-                  onMouseDown={() => selectSuggestion(c)}
-                  className="px-3 py-2.5 cursor-pointer text-sm flex justify-between items-center"
+                <li key={c.id ?? i}
                   style={{ borderBottom: i < nameSuggestions.length - 1 ? '1px solid var(--color-border)' : undefined }}>
-                  <span className="font-medium">{(c as any).name || c.client_name}</span>
-                  <span className="text-xs text-[var(--color-text-muted)]">{c.client_phone || (c as any).company_name || ''}</span>
+                  <button
+                    type="button"
+                    onMouseDown={() => selectSuggestion(c)}
+                    className="w-full px-3 py-2.5 text-start text-sm flex justify-between items-center"
+                  >
+                    <span className="font-medium">{clientDisplayName(c)}</span>
+                    <span className="text-xs text-[var(--color-text-muted)]">{c.client_phone || c.company_name || ''}</span>
+                  </button>
                 </li>
               ))}
             </ul>
@@ -157,34 +153,36 @@ export function FixStep1Client() {
       </FormField>
 
       {/* ID */}
-      <FormField label={t('client_id')} sublabel="תעודת זהות">
+      <FormField label={t('client_id')}>
         <div className="relative">
-          <input type="text" className={inputClass} value={form.client_id}
+          <input type="text" className={fieldClass()} value={form.client_id}
             onChange={e => { updateField('client_id', e.target.value); lookupByField('id', e.target.value) }}
             placeholder={t('client_id_placeholder')} inputMode="numeric" />
-          <StatusIcon />
+          <LookupStatusIcon status={statusFor('id')} />
         </div>
       </FormField>
 
       {/* Company Number */}
-      <FormField label="Company Number" sublabel='ח"פ'>
+      <FormField label={t('company_number')}>
         <div className="relative">
-          <input type="text" className={inputClass} value={form.client_company_number}
+          <input type="text" className={fieldClass()} value={form.client_company_number}
             onChange={e => { updateField('client_company_number', e.target.value); lookupByField('company', e.target.value) }}
-            placeholder="9 digit company number" inputMode="numeric" />
-          <StatusIcon />
+            placeholder={t('company_9_digits')} inputMode="numeric" />
+          <LookupStatusIcon status={statusFor('company')} />
         </div>
       </FormField>
 
       {/* Email */}
-      <FormField label={t('client_email')}>
-        <input type="email" className={inputClass} value={form.client_email}
+      <FormField label={t('client_email')} error={errors.client_email}>
+        <input type="email" className={fieldClass(!!errors.client_email)} value={form.client_email}
+          autoComplete="email" inputMode="email"
+          aria-invalid={!!errors.client_email}
           onChange={e => updateField('client_email', e.target.value)} />
       </FormField>
 
       {/* Address */}
       <FormField label={t('client_address')}>
-        <input type="text" className={inputClass} value={form.client_address}
+        <input type="text" className={fieldClass()} value={form.client_address}
           onChange={e => updateField('client_address', e.target.value)}
           placeholder={t('client_address_placeholder')} />
       </FormField>
@@ -193,6 +191,7 @@ export function FixStep1Client() {
       <FormField label={t('client_country')}>
         <select className={selectClass} value={form.client_country}
           onChange={e => updateField('client_country', e.target.value)}>
+          <option value="">{t('not_specified')}</option>
           {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
       </FormField>

@@ -117,6 +117,14 @@ label {
   color: var(--color-bg);
 }
 
+/* iOS home-indicator inset.
+   BottomNav has always carried this class, but it was never defined anywhere —
+   so on an iPhone with a home indicator the nav buttons sat under the system
+   bar. Needs `viewport-fit=cover` in index.html for env() to resolve. */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
 /* Hide scrollbar (used in wheel pickers) */
 .hide-scrollbar {
   scrollbar-width: none;

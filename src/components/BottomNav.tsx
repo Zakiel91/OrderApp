@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import { useLanguage } from '../context/LanguageContext'
 import { useWizardNav } from '../context/WizardNavContext'
+import { hasErrors } from '../lib/validation'
 import { buttonClass, secondaryButtonClass } from './FormField'
 
 const tabs = [
@@ -15,18 +16,49 @@ export function BottomNav() {
   const location = useLocation()
   const navigate = useNavigate()
   const { t } = useLanguage()
-  const { state } = useWizardNav()
+  const { state, setErrors, clearErrors } = useWizardNav()
   const [submitting, setSubmitting] = useState(false)
 
   const isWizard = location.pathname === '/orders/new' || location.pathname === '/orders/fix'
 
   // Wizard mode
   if (isWizard && state) {
-    const { step, totalSteps, setStep, submitHandler } = state
+    const { step, totalSteps, setStep, submitHandler, validateStep, validateAll } = state
     const isLastStep = step === totalSteps
+
+    const handleNext = () => {
+      // Required fields are now enforced here. Before this, the asterisks in the
+      // form were decorative and "Next" always advanced.
+      const errs = validateStep(step)
+      setErrors(errs)
+      if (hasErrors(errs)) {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        return
+      }
+      setStep(step + 1)
+    }
+
+    const handleBack = () => {
+      clearErrors()
+      setStep(step - 1)
+    }
 
     const handleSubmit = async () => {
       if (!submitHandler) return
+
+      // Re-check every step, not just the review screen: a field could have been
+      // cleared after the step that owns it was passed.
+      const errs = validateAll()
+      setErrors(errs)
+      if (hasErrors(errs)) {
+        // Jump back to the first step that actually has a problem.
+        for (let s = 1; s < totalSteps; s++) {
+          if (hasErrors(validateStep(s))) { setStep(s); break }
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        return
+      }
+
       setSubmitting(true)
       try {
         await submitHandler()
@@ -44,7 +76,7 @@ export function BottomNav() {
           {step > 1 && (
             <button
               className={secondaryButtonClass + ' !w-auto flex-1'}
-              onClick={() => setStep(step - 1)}
+              onClick={handleBack}
               disabled={submitting}
             >
               {t('back')}
@@ -61,7 +93,7 @@ export function BottomNav() {
           ) : (
             <button
               className={buttonClass + ' !w-auto flex-1'}
-              onClick={() => setStep(step + 1)}
+              onClick={handleNext}
             >
               {t('next')}
             </button>
@@ -85,11 +117,12 @@ export function BottomNav() {
             <button
               key={tab.path}
               onClick={() => navigate(tab.path)}
+              aria-current={active ? 'page' : undefined}
               className={`flex flex-col items-center py-2 px-3 min-h-[52px] flex-1 transition-colors ${
                 active ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-muted)]'
               }`}
             >
-              <span className="text-xl">{tab.icon}</span>
+              <span className="text-xl" aria-hidden="true">{tab.icon}</span>
               <span className="text-[11px] mt-0.5">{t(tab.labelKey)}</span>
             </button>
           )

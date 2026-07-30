@@ -14,7 +14,13 @@ export function ProgressBar({ current, total }: Props) {
       <div className="flex justify-between text-sm text-[var(--color-text-muted)] mb-1.5">
         <span>{t('step')} {current} {t('of')} {total}</span>
       </div>
-      <div className="h-1.5 bg-[var(--color-surface-light)] rounded-full overflow-hidden">
+      <div
+        role="progressbar"
+        aria-valuemin={1}
+        aria-valuemax={total}
+        aria-valuenow={current}
+        aria-label={`${t('step')} ${current} ${t('of')} ${total}`}
+        className="h-1.5 bg-[var(--color-surface-light)] rounded-full overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-300"
           style={{ width: `${pct}%`, background: 'linear-gradient(90deg, var(--color-primary), var(--color-accent))' }}

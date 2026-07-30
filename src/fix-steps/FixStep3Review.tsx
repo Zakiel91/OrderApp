@@ -2,9 +2,14 @@ import { useState, useCallback, useEffect } from 'react'
 import { useFixForm } from '../context/FixFormContext'
 import { useLanguage } from '../context/LanguageContext'
 import { buttonClass } from '../components/FormField'
-import { createOrder, updateOrder, saveClientIfNew } from '../lib/api'
+import { createOrder, updateOrder, saveClientIfNew, ApiError } from '../lib/api'
 import { formatDateIL } from '../lib/constants'
 import { uploadOrderImages } from '../lib/imageUtils'
+import en from '../i18n/en.json'
+
+// The description column is read in the Dashboard and on the shop floor, so the
+// stored text is always English regardless of the salesman's UI language.
+const EN: Record<string, string> = en
 
 function ReviewSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -28,13 +33,15 @@ function ReviewRow({ label, value }: { label: string; value?: string }) {
 }
 
 export function FixStep3Review() {
-  const { form, resetForm, registerSubmitHandler } = useFixForm()
+  const { form, resetForm, clearDraft, registerSubmitHandler } = useFixForm()
   const { t } = useLanguage()
   const [success, setSuccess] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [imageWarning, setImageWarning] = useState(false)
 
   const handleSubmit = useCallback(async () => {
     setError(null)
+    setImageWarning(false)
     try {
       const payload = {
         order_prefix: 'FIX',
@@ -43,6 +50,8 @@ export function FixStep3Review() {
         salesman_name: form.salesman_name,
         client_name: form.client_name,
         client_id: form.client_id || undefined,
+        client_teudat: form.client_id || undefined,
+        client_company_number: form.client_company_number || undefined,
         client_phone: form.client_phone || undefined,
         client_email: form.client_email || undefined,
         client_address: form.client_address || undefined,
@@ -50,7 +59,8 @@ export function FixStep3Review() {
         jewelry_type: form.jewelry_type || undefined,
         metal: form.metal || undefined,
         description: [
-          form.fix_options.map(o => o).join(', '),
+          // Canonical English labels, not the raw `stone_fix` keys.
+          form.fix_options.map(o => EN[`fixopt_${o}`] || o.replace(/_/g, ' ')).join(', '),
           form.fix_other_text,
           form.size ? `New size: ${form.size}` : '',
           form.description,
@@ -69,7 +79,9 @@ export function FixStep3Review() {
           if (imageKeys) {
             await updateOrder({ id: result.id, image_urls: imageKeys })
           }
-        } catch { /* images failed but order was created */ }
+        } catch {
+          setImageWarning(true)
+        }
       }
 
       // Silently save client to DB if they weren't already there
@@ -86,10 +98,13 @@ export function FixStep3Review() {
       }
 
       setSuccess(result.order_number)
+      // Clear the persisted draft immediately — see Step6Review.
+      clearDraft()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to submit')
+      if (err instanceof ApiError && err.status === 0) setError(t('err_network'))
+      else setError(err instanceof Error ? err.message : t('error'))
     }
-  }, [form, t, resetForm])
+  }, [form, t, clearDraft])
 
   useEffect(() => {
     registerSubmitHandler(handleSubmit)
@@ -100,13 +115,19 @@ export function FixStep3Review() {
     return (
       <div className="p-8 text-center">
         <div className="w-20 h-20 mx-auto bg-[var(--color-success)] rounded-full flex items-center justify-center mb-4">
-          <svg className="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <svg className="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
         <h2 className="text-xl font-bold mb-2">{t('fix_submitted')}</h2>
         <p className="text-[var(--color-text-muted)] mb-1">{t('fix_order_number')}</p>
         <p className="text-2xl font-bold text-[var(--color-accent)] mb-6">{success}</p>
+        {imageWarning && (
+          <div className="mx-auto max-w-xs mb-4 rounded-xl p-3 text-[13px]"
+            style={{ background: 'var(--color-warning)15', border: '1px solid var(--color-warning)40', color: 'var(--color-warning)' }}>
+            {t('images_upload_failed')}
+          </div>
+        )}
         <button className={buttonClass} onClick={() => { resetForm(); setSuccess(null) }}>
           {t('fix_create_another')}
         </button>
@@ -121,6 +142,7 @@ export function FixStep3Review() {
       <ReviewSection title={t('review_client')}>
         <ReviewRow label={t('client_name')} value={form.client_name} />
         <ReviewRow label={t('client_id')} value={form.client_id} />
+        <ReviewRow label={t('company_number')} value={form.client_company_number} />
         <ReviewRow label={t('client_phone')} value={form.client_phone} />
         <ReviewRow label={t('client_email')} value={form.client_email} />
         <ReviewRow label={t('client_address')} value={form.client_address} />
@@ -144,7 +166,7 @@ export function FixStep3Review() {
       </ReviewSection>
 
       {error && (
-        <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3 mb-4 text-red-400 text-sm">{error}</div>
+        <div role="alert" className="bg-red-500/10 border border-red-500/30 rounded-xl p-3 mb-4 text-red-400 text-sm">{error}</div>
       )}
     </div>
   )

@@ -35,11 +35,14 @@ export function MetalWheelPicker({ value, onChange, metals, showQuickPick = fals
     el.scrollTo({ top: index * ITEM_HEIGHT, behavior: smooth ? 'smooth' : 'auto' })
   }, [])
 
-  // Scroll to selected on mount
+  // Scroll to selected on mount only — afterwards the user drives the wheel.
+  const didInitialScroll = useRef(false)
   useEffect(() => {
+    if (didInitialScroll.current) return
+    didInitialScroll.current = true
     const idx = metals.indexOf(value)
     if (idx >= 0) scrollToIndex(idx, false)
-  }, [])
+  }, [metals, value, scrollToIndex])
 
   // Snap on scroll end
   const snapTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)

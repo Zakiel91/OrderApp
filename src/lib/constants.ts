@@ -3,6 +3,14 @@ export const ACTIVE_PREFIXES = [
   'ROM', 'IDO', 'DAN', 'TOM', 'GRE', 'FIX',
 ] as const
 
+// Shared by the production and fix client steps — was duplicated in both.
+export const COUNTRIES = [
+  'Israel', 'United States', 'United Kingdom', 'Belgium', 'Germany',
+  'France', 'Italy', 'Switzerland', 'Netherlands', 'India',
+  'China', 'Hong Kong', 'Japan', 'UAE', 'Thailand',
+  'Australia', 'Canada', 'Russia', 'Turkey', 'South Africa',
+] as const
+
 export const JEWELRY_TYPES = [
   { key: 'ring', icon: 'ring' },
   { key: 'earrings', icon: 'earrings' },
@@ -63,6 +71,54 @@ export function formatDateIL(dateStr: string): string {
   const [y, m, d] = dateStr.split('-')
   if (!y || !m || !d) return dateStr
   return `${d}/${m}/${y}`
+}
+
+// Order statuses the worker can return. Used for the filter dropdown and for
+// colour lookup, so the list lives in one place.
+export const ORDER_STATUSES = [
+  'new', 'received', 'in_production', 'completed', 'delivered',
+  'cancelled', 'on_hold', 'paid', 'sold', 'in_stock',
+] as const
+
+export const STATUS_COLORS: Record<string, string> = {
+  new: 'bg-blue-500/20 text-blue-400',
+  received: 'bg-blue-500/20 text-blue-400',
+  in_production: 'bg-yellow-500/20 text-yellow-400',
+  completed: 'bg-green-500/20 text-green-400',
+  delivered: 'bg-green-600/20 text-green-300',
+  cancelled: 'bg-red-500/20 text-red-400',
+  on_hold: 'bg-gray-500/20 text-gray-400',
+  paid: 'bg-emerald-500/20 text-emerald-400',
+  sold: 'bg-purple-500/20 text-purple-400',
+  in_stock: 'bg-cyan-500/20 text-cyan-400',
+}
+
+export function statusColor(status: string): string {
+  return STATUS_COLORS[status] || 'bg-gray-500/20 text-gray-400'
+}
+
+/**
+ * Translate `key`, but fall back to `fallback` when there is no translation.
+ * `t()` returns the key itself on a miss, which would print `payment_foo` into
+ * the UI for any value the app doesn't know about (e.g. rows imported by the
+ * Dashboard).
+ */
+export function tOr(t: (key: string) => string, key: string, fallback: string): string {
+  const value = t(key)
+  return value === key ? fallback : value
+}
+
+/**
+ * Human label for a status. Falls back to de-snake-casing an unknown status
+ * rather than showing the raw `in_production` key to the user.
+ * `t()` returns the key itself when a translation is missing.
+ */
+export function formatStatus(status: string, t: (key: string) => string): string {
+  if (!status) return ''
+  const key = `status_${status}`
+  const translated = t(key)
+  if (translated !== key) return translated
+  return status.replace(/_/g, ' ')
 }
 
 // Advance payment methods

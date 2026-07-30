@@ -1,6 +1,7 @@
 import { useLanguage } from '../context/LanguageContext'
 import { useAuth } from '../context/AuthContext'
 import { secondaryButtonClass } from '../components/FormField'
+import { tOr } from '../lib/constants'
 import type { Language } from '../lib/types'
 
 const LANGUAGES: { key: Language; labelKey: string }[] = [
@@ -25,7 +26,9 @@ export function SettingsPage() {
           <div>
             <div className="text-sm font-medium">{user.name}</div>
             <div className="text-xs text-[var(--color-text-muted)]">{user.email}</div>
-            <div className="text-xs text-[var(--color-accent)] mt-0.5">{user.prefix} · {user.role}</div>
+            <div className="text-xs text-[var(--color-accent)] mt-0.5">
+              {user.prefix} · {tOr(t, `role_${user.role}`, user.role)}
+            </div>
           </div>
         </div>
       )}

@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { useOrderForm } from '../context/OrderFormContext'
 import { useLanguage } from '../context/LanguageContext'
 import { buttonClass } from '../components/FormField'
-import { createOrder, updateOrder, saveClientIfNew } from '../lib/api'
+import { createOrder, updateOrder, saveClientIfNew, ApiError } from '../lib/api'
 import { formatDateIL } from '../lib/constants'
 import { uploadOrderImages } from '../lib/imageUtils'
 
@@ -26,14 +26,17 @@ function ReviewSection({ title, children }: { title: string; children: React.Rea
 }
 
 export function Step6Review() {
-  const { form, resetForm, registerSubmitHandler } = useOrderForm()
+  const { form, resetForm, clearDraft, registerSubmitHandler } = useOrderForm()
   const { t } = useLanguage()
   const [submitted, setSubmitted] = useState(false)
   const [orderNumber, setOrderNumber] = useState('')
   const [error, setError] = useState('')
+  // Surfaced instead of swallowed: the order exists but its photos didn't land.
+  const [imageWarning, setImageWarning] = useState(false)
 
   const handleSubmit = useCallback(async () => {
     setError('')
+    setImageWarning(false)
     try {
       const payload: Record<string, unknown> = {
         order_prefix: form.order_prefix,
@@ -49,11 +52,19 @@ export function Step6Review() {
         client_company_number: form.client_company_number || undefined,
         salesman_name: form.salesman_name,
         jewelry_type: form.jewelry_type,
+        // Free-text type description for "other" — the worker stores body.description.
+        description: form.jewelry_type === 'other' ? (form.other_type || undefined) : undefined,
         metal: form.metal,
         size: form.size || undefined,
         size_system: form.size_system || undefined,
         collection_style: form.collection_style || undefined,
-        comment: form.comment || undefined,
+        // There is no finger_notes column, so it is folded into the comment
+        // rather than being dropped (which is what happened before it had its
+        // own field).
+        comment: [
+          form.comment,
+          form.finger_notes ? `Finger notes: ${form.finger_notes}` : '',
+        ].filter(Boolean).join(' | ') || undefined,
         main_stone_parcel: form.main_stone_parcel || undefined,
         main_stone_manual: form.main_stone_manual || undefined,
         side_stones: form.side_stones || undefined,
@@ -82,6 +93,9 @@ export function Step6Review() {
         // Necklace fields
         necklace_length_cm: form.necklace_length_cm || undefined,
         necklace_extension: form.necklace_extension || undefined,
+        // Multi-station positions were captured in the UI but never submitted;
+        // the worker stores them inside the `measurements` JSON column.
+        necklace_stations: form.necklace_stations.length > 0 ? form.necklace_stations : undefined,
         // Eternity
         eternity_type: form.eternity_type || undefined,
         wide_band: form.wide_band || undefined,
@@ -98,7 +112,11 @@ export function Step6Review() {
           if (imageKeys) {
             await updateOrder({ id: result.id, image_urls: imageKeys })
           }
-        } catch { /* images failed but order was created */ }
+        } catch {
+          // The order is saved; don't fail the submit, but say the photos didn't
+          // make it so the salesman can re-attach them from the order screen.
+          setImageWarning(true)
+        }
       }
 
       // Silently save client to DB if they weren't already there
@@ -116,10 +134,15 @@ export function Step6Review() {
 
       setOrderNumber(result.order_number || form.order_prefix + '???')
       setSubmitted(true)
+      // Drop the persisted draft right away. It used to survive until the user
+      // pressed "Create another", so navigating away left the submitted order
+      // pre-filled into the next new order.
+      clearDraft()
     } catch (err) {
-      setError(err instanceof Error ? err.message : t('error'))
+      if (err instanceof ApiError && err.status === 0) setError(t('err_network'))
+      else setError(err instanceof Error ? err.message : t('error'))
     }
-  }, [form, t, resetForm])
+  }, [form, t, clearDraft])
 
   useEffect(() => {
     registerSubmitHandler(handleSubmit)
@@ -129,11 +152,17 @@ export function Step6Review() {
   if (submitted) {
     return (
       <div className="p-4 flex flex-col items-center justify-center min-h-[60vh]">
-        <div className="text-6xl mb-4">✅</div>
+        <div className="text-6xl mb-4" aria-hidden="true">✅</div>
         <h2 className="text-xl font-bold mb-2">{t('order_submitted')}</h2>
-        <p className="text-[var(--color-text-muted)] mb-8 text-center">
+        <p className="text-[var(--color-text-muted)] mb-4 text-center">
           {t('order_created', { number: orderNumber })}
         </p>
+        {imageWarning && (
+          <div className="w-full max-w-xs mb-4 rounded-xl p-3 text-[13px] text-center"
+            style={{ background: 'var(--color-warning)15', border: '1px solid var(--color-warning)40', color: 'var(--color-warning)' }}>
+            {t('images_upload_failed')}
+          </div>
+        )}
         <div className="w-full max-w-xs space-y-3">
           <button className={buttonClass} onClick={resetForm}>
             {t('create_another')}
@@ -149,13 +178,14 @@ export function Step6Review() {
 
       <ReviewSection title={t('review_basics')}>
         <ReviewRow label={t('prefix')} value={form.order_prefix} />
-        <ReviewRow label={t('order_date')} value={form.order_date} />
+        <ReviewRow label={t('order_date')} value={form.order_date ? formatDateIL(form.order_date) : ''} />
         <ReviewRow label={t('ordered_by')} value={form.salesman_name} />
       </ReviewSection>
 
       <ReviewSection title={t('review_client')}>
         <ReviewRow label={t('client_name')} value={form.client_name} />
         <ReviewRow label={t('client_id')} value={form.client_id} />
+        <ReviewRow label={t('company_number')} value={form.client_company_number} />
         <ReviewRow label={t('client_phone')} value={form.client_phone} />
         <ReviewRow label={t('client_email')} value={form.client_email} />
         <ReviewRow label={t('client_address')} value={form.client_address} />
@@ -164,9 +194,25 @@ export function Step6Review() {
 
       <ReviewSection title={t('review_product')}>
         <ReviewRow label={t('jewelry_type')} value={form.jewelry_type ? t(form.jewelry_type) : ''} />
+        <ReviewRow label={t('other_type_describe')} value={form.jewelry_type === 'other' ? form.other_type : ''} />
         <ReviewRow label={t('metal')} value={form.metal} />
         <ReviewRow label={t('size')} value={form.size ? `${form.size} (${form.size_system.toUpperCase()})` : ''} />
         <ReviewRow label={t('collection')} value={form.collection_style} />
+        <ReviewRow label={t('finger_notes')} value={form.finger_notes} />
+        {form.jewelry_type === 'earrings' && (
+          <>
+            <ReviewRow label={t('earring_type')} value={form.earring_sub_type ? t(form.earring_sub_type === 'clip-on' ? 'clip_on' : form.earring_sub_type) : ''} />
+            <ReviewRow label={t('back_type')} value={form.earring_back_type ? t(form.earring_back_type) : ''} />
+            <ReviewRow label={t('hoop_diameter')} value={form.earring_diameter_mm ? `${form.earring_diameter_mm} mm` : ''} />
+            <ReviewRow label={t('drop_length')} value={form.earring_drop_length_mm ? `${form.earring_drop_length_mm} mm` : ''} />
+          </>
+        )}
+        {form.jewelry_type === 'necklace' && (
+          <>
+            <ReviewRow label={t('necklace_length')} value={form.necklace_length_cm ? `${form.necklace_length_cm} cm` : ''} />
+            <ReviewRow label={t('multi_station')} value={form.necklace_stations.filter(Boolean).join(', ')} />
+          </>
+        )}
         {form.jewelry_type === 'pendant' && (
           <>
             <ReviewRow label={t('pendant_attached_label')} value={form.pendant_attached ? t('attached') : t('not_attached')} />
@@ -202,7 +248,7 @@ export function Step6Review() {
       </ReviewSection>
 
       {error && (
-        <div className="bg-[var(--color-error)]/20 border border-[var(--color-error)] rounded-lg p-3 mb-4 text-sm text-[var(--color-error)]">
+        <div role="alert" className="bg-[var(--color-error)]/20 border border-[var(--color-error)] rounded-lg p-3 mb-4 text-sm text-[var(--color-error)]">
           {error}
         </div>
       )}

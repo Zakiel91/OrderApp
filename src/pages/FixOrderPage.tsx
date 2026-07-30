@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useFixForm } from '../context/FixFormContext'
 import { useAuth } from '../context/AuthContext'
+import { useWizardNav } from '../context/WizardNavContext'
 import { ProgressBar } from '../components/ProgressBar'
 import { DraftSavedToast } from '../components/DraftSavedToast'
 import { FixStep1Client } from '../fix-steps/FixStep1Client'
@@ -10,28 +11,35 @@ import { FixStep3Review } from '../fix-steps/FixStep3Review'
 const STEPS = [FixStep1Client, FixStep2Item, FixStep3Review]
 
 export function FixOrderPage() {
-  const { form, updateField, step, totalSteps } = useFixForm()
+  const { form, updateFields, step, totalSteps } = useFixForm()
   const { user } = useAuth()
+  const { clearErrors } = useWizardNav()
   const StepComponent = STEPS[step - 1]
 
-  const prevStep = useRef(step)
-  const [direction, setDirection] = useState<'forward' | 'back'>('forward')
-
+  const salesmanName = form.salesman_name
+  const orderDate = form.order_date
   useEffect(() => {
-    if (user) {
-      if (!form.salesman_name) updateField('salesman_name', user.name)
-    }
-    if (!form.order_date) updateField('order_date', new Date().toISOString().split('T')[0])
-  }, [user, form.salesman_name, form.order_date, updateField])
+    const patch: Parameters<typeof updateFields>[0] = {}
+    if (user && !salesmanName) patch.salesman_name = user.name
+    if (!orderDate) patch.order_date = new Date().toISOString().split('T')[0]
+    if (Object.keys(patch).length > 0) updateFields(patch)
+  }, [user, salesmanName, orderDate, updateFields])
 
-  // UX-01 + UX-05: scroll reset + direction tracking on step change
+  // Derived state adjusted during render — see NewOrderPage.
+  const [tracker, setTracker] = useState<{ step: number; direction: 'forward' | 'back' }>(
+    { step, direction: 'forward' }
+  )
+  if (tracker.step !== step) {
+    setTracker({ step, direction: step > tracker.step ? 'forward' : 'back' })
+  }
+  const direction = tracker.direction
+
   const isFirstRender = useRef(true)
   useEffect(() => {
-    if (isFirstRender.current) { isFirstRender.current = false; prevStep.current = step; return }
-    setDirection(step > prevStep.current ? 'forward' : 'back')
-    prevStep.current = step
+    if (isFirstRender.current) { isFirstRender.current = false; return }
     window.scrollTo(0, 0)
-  }, [step])
+    clearErrors()
+  }, [step, clearErrors])
 
   return (
     <>

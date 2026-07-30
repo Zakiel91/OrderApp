@@ -26,28 +26,27 @@ function AppRoutes() {
 
   return (
     <WizardNavProvider>
-      <>
-        <div className="max-w-lg mx-auto min-h-screen pb-[68px]">
-          <Routes>
-            <Route path="/orders" element={<MyOrdersPage />} />
-            <Route path="/orders/new" element={
-              <OrderFormProvider>
-                <NewOrderPage />
-              </OrderFormProvider>
-            } />
-            <Route path="/orders/fix" element={
-              <FixFormProvider>
-                <FixOrderPage />
-              </FixFormProvider>
-            } />
-            <Route path="/orders/:id/edit" element={<EditOrderPage />} />
-            <Route path="/orders/:id" element={<OrderDetailPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="*" element={<Navigate to="/orders" replace />} />
-          </Routes>
-        </div>
-        <BottomNav />
-      </>
+      {/* Bottom padding clears the fixed nav plus the iOS home indicator. */}
+      <div className="max-w-lg mx-auto min-h-screen pb-[calc(68px+env(safe-area-inset-bottom,0px))]">
+        <Routes>
+          <Route path="/orders" element={<MyOrdersPage />} />
+          <Route path="/orders/new" element={
+            <OrderFormProvider>
+              <NewOrderPage />
+            </OrderFormProvider>
+          } />
+          <Route path="/orders/fix" element={
+            <FixFormProvider>
+              <FixOrderPage />
+            </FixFormProvider>
+          } />
+          <Route path="/orders/:id/edit" element={<EditOrderPage />} />
+          <Route path="/orders/:id" element={<OrderDetailPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="*" element={<Navigate to="/orders" replace />} />
+        </Routes>
+      </div>
+      <BottomNav />
     </WizardNavProvider>
   )
 }
