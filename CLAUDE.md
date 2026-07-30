@@ -20,13 +20,27 @@ Hard rules, permanent decisions, and critical architecture facts.
 - `C:\Dashboard\CLAUDE.md` is authoritative for worker rules, DB schema, and infra. Check it before touching backend.
 
 ### Deploy
-```bash
-# Frontend
-npm run deploy        # → Cloudflare Pages project "order-app" (NOT "orders-innovationdia")
+**Worker first, frontend second.** Shipping the frontend against an older worker means the
+UI calls endpoints that don't exist yet.
 
-# API worker
-cd C:\Dashboard\worker && npx wrangler deploy
+```powershell
+# 1. API worker — dot-source the token in the SAME command (C:\Dashboard\CLAUDE.md rule:
+#    do NOT rely on `wrangler login`, the OAuth identity drifts between accounts)
+. C:\Dashboard\.cloudflare-token.ps1; cd C:\Dashboard\worker; npx wrangler deploy
+
+# 2. Frontend → Cloudflare Pages project "order-app" (NOT "orders-innovationdia")
+cd C:\OrderApp; npm run deploy
 ```
+
+**Pages picks production vs preview from the current git branch.** Deploying from a
+feature branch creates a *preview* deployment, prints a normal success message, and leaves
+production untouched — silent no-op. Merge to `main` before deploying, or pass
+`--branch main` on purpose. Confirm afterwards, never assume:
+```powershell
+npx wrangler pages deployment list --project-name order-app   # top row must be Production / main
+```
+Happened 2026-07-30: a deploy from `fix/frontend-audit-2026-07-30` looked successful while
+`orders.innovationdia.com` stayed on a three-month-old build.
 
 ---
 
